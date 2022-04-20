@@ -1,6 +1,7 @@
 #Paqueterías----
 
 library(ggplot2)
+library(ggpubr)
 
 #Creación de carpetas requeridas----
 
@@ -48,6 +49,10 @@ for (a in list_xlsx) {
   
   temp_dual <- readxl::read_xlsx(path = paste0("TEST/", a), col_names = TRUE) 
   
+  #Agregar candado para evaluar archivos 
+  if (length(temp_dual) < 5) {
+    next
+  }
   #Agregar condicional al porcentaje de desroden
   
   temp_dual$condition_10 <- 1 #Crear nueva columna
@@ -204,12 +209,18 @@ for (a in list_txt) {
   
   coverage[length(coverage) + 1] <- (i/h)*100 #Dualidad coverage
   
+  #Agregar condición para que los valores NA sean convertidos a ceros
+  
+  coverage[is.na(coverage)] <- 0
+  
 }
 
 #Convertir en un dataframe los datos con un ID general
 
 coverage <- data.frame("ID_biosensor" = substr(list_txt, 1, 9), 
                        "coverage" = coverage)
+
+
 
 
 
