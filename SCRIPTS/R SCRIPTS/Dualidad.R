@@ -2,6 +2,35 @@
 
 library(ggplot2)
 
+#Creación de carpetas requeridas----
+
+#Creación de carpetas para guardar los archivos generados
+#Se debe especificar el directorio donde se encuentren los
+#archivos por analizar
+
+#Guardar el directorio de trabajo
+main_dir <- "C:/Users/Windows/Desktop/TEST/" #colocar directorio propio
+
+#Buscar las carpetas requeridas en el directorio anterior
+sub_dir <- "DUALIDAD" #primer carpeta requerida
+dir.create(file.path(main_dir, sub_dir)) 
+
+sub_dir <- "PLOTS" #segunda carpeta requerida
+dir.create(file.path(main_dir, sub_dir))
+
+#Crear dos subdirectorios dentro de la carpeta de "PLOTS"
+#llamada "DUAL_PLOT" y "DISOR_PLOT" para guardar los 
+#gráficos generados posteriormente
+sub_dir <- "DUAL_PLOT"
+main_dir <- "C:/Users/Windows/Desktop/TEST/PLOTS/"
+dir.create(file.path(main_dir, sub_dir))
+
+sub_dir <- "DISOR_PLOT"
+main_dir <- "C:/Users/Windows/Desktop/TEST/PLOTS/"
+dir.create(file.path(main_dir, sub_dir))
+
+
+
 #Análisis de dualidad----
 
 #Generar una variable con todos los nombres de los archivos 
@@ -42,14 +71,14 @@ for (a in list_xlsx) {
   temp_dual$condition_50 <- 1
   
   for (d in 1:nrow(temp_dual)) {
-    for (e in ((temp_dual[d,3])*100)) {
+    for (e in ((temp_dual[d,3])*1)) {
       if (e < 50) {
         
         temp_dual[d,7] <- 0
         
       } else {
         
-        temp_dual[d,7] <- b
+        temp_dual[d,7] <- e
         
       }
     }
@@ -181,5 +210,8 @@ for (a in list_txt) {
 
 coverage <- data.frame("ID_biosensor" = substr(list_txt, 1, 9), 
                        "coverage" = coverage)
+
+
+
 
 
