@@ -146,26 +146,22 @@ for (a in list_xlsx) {
 }
 
 
-
 #Determinación de coverage de dualidad para IDRs----
 
 #Generar una variable con todos los nombres de los
 #archivos por analizar
 
-list_txt <- dir(path = "DATA/DATA FOR R/DATA FOR ANALYSIS/DUALIDAD_ALL/",
+list_txt <- dir(path = "TEST/DUALIDAD/",
                 pattern = "*.txt")
 
 #Cargar cada archivo con los datos de dualidad calculados
-#anteriormente. Cambiar antes el directorio al sitio donde
-#se encuentren los archivos
-
-setwd("DATA/DATA FOR R/DATA FOR ANALYSIS/DUALIDAD_ALL/")
+#anteriormente. 
 
 temp_dual <- c() #vector vacío
 coverage <- c() #vector vacío
 for (a in list_txt) {
   
-  temp_dual <- read.table(file = a, header = TRUE, sep = ",")
+  temp_dual <- read.table(file = paste0("TEST/DUALIDAD/", a), header = TRUE, sep = ",")
   
   #Contar la cantidad de residuos con dualidad (mayor a 0.1) 
   #y dividirlos entre la longitud de la proteína (cantidad de
@@ -183,7 +179,7 @@ for (a in list_txt) {
 
 #Convertir en un dataframe los datos con un ID general
 
-coverage <- data.frame("factor_ID" = c(1:69)[-c(10,13,19,38,43,53,54,62)], 
+coverage <- data.frame("ID_biosensor" = substr(list_txt, 1, 9), 
                        "coverage" = coverage)
 
 
