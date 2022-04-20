@@ -5,6 +5,10 @@ library(ggpubr)
 
 #Creación de carpetas requeridas----
 
+#Cambiar únicamente el directorio principal. En este caso, debe
+#ser el directorio donde se encuentren todos los archivos que se
+#desean analizar
+
 #Creación de carpetas para guardar los archivos generados
 #Se debe especificar el directorio donde se encuentren los
 #archivos por analizar
