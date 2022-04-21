@@ -52,6 +52,7 @@ list_xlsx <- dir(path = "TEST/",
 for (a in list_xlsx) {
   
   temp_dual <- readxl::read_xlsx(path = paste0("TEST/", a), col_names = TRUE) 
+  names(temp_dual) <- fracc
   
   #Agregar candado para evaluar archivos 
   if (length(temp_dual) < 5) {
@@ -160,6 +161,8 @@ for (a in list_xlsx) {
   
   #Gŕafico de dualidad
   
+  if (sum(temp_dual$dualidad) != 0) {
+    
   p1 <- ggplot() +
           geom_line(data = temp_dual, aes(x = as.integer(res), y = dualidad),
                     color = "blue", size = 1) +
@@ -173,7 +176,9 @@ for (a in list_xlsx) {
           scale_x_continuous(breaks = seq(0, max(temp_dual$res), by = 15), 
                              expand = c(0,0.1)) +
           scale_y_continuous(breaks = seq(0,1, by = 0.1), expand = c(0,0))
-  
+  } else {
+      next
+  }
 
   #Guardar gráfico en su carpeta correspondiente
   
