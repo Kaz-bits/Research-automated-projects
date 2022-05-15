@@ -254,13 +254,54 @@ for (a in temp_vec) {
 
 #Obtención cociente DxAm y DxDm----
 
-#Obtener los datos de fluorescencia del donador a 475
+#Obtención cociente DxAm y DxDm----
+
+#Obtener los datos de fluorescencia del donador a 475. 
+#Filtrar de "fret" las fluorescencias para cada constructo
+#en un dataframe
 
 
 
+#Extraer la cantidad de constructos que tienen los datos
+length(fret[,-c(1,2)])/12 #Cantidad de constructos
+seq(1,length(fret[,-c(1,2)]),12) #Columnas de cada constructo
+
+#Generar dataframe donde guardar datos
+temp_df <- data.frame(matrix(ncol = (length(fret[,-c(1,2)])/8), 
+                             nrow = 0))
+
+#Obtener los renglones con las fluorescencias del donador y
+#aceptor
+temp <- fret[fret$`Wavelength [nm]` == "475" | 
+               fret$`Wavelength [nm]` == "525",]
+temp_vec <- c() #vector vacío
+#Ejecutar código
+for (a in seq(1,length(fret[,-c(1,2)]),12)) {
+  
+  temp_vec <- temp[,seq(a+2,a+13)]
+  temp_df[nrow(temp_df) + 1,] <- temp_vec[1,] 
+  temp_df[nrow(temp_df) + 1,] <- temp_vec[2,] 
+  
+}
+
+  
+temp_df[,length(temp_df) + 1] <- c(475, 525)
+temp_df <- temp_df[,c(13,1:12)]
+names(temp_df)[1] <- names(fret)[2]
+temp_name <- c(rep(paste0("NaCl_", "0M"),3), rep(paste0("NaCl_", "0.5M"),3),
+  rep(paste0("NaCl_", "1M"),3), rep(paste0("NaCl_", "1.5M"),3))
+#Agreagr nombres a las columnas por condición
+names(temp_df)[2:13] <- temp_name
 
 
-#Obtener los datos de fluorescencia del aceptor a 525
+#Una vez obtenido el dataframe con los datos de
+#fluorescencia del donador y aceptor, realizar
+#la normalización
+
+temp <- t(temp_df[c(1,2),-1])
+temp[,length(temp) + 1] <- c(rep(paste0("NaCl_", "0M"),3), rep(paste0("NaCl_", "0.5M"),3),
+                             rep(paste0("NaCl_", "1M"),3), rep(paste0("NaCl_", "1.5M"),3))
+
 
 
 
