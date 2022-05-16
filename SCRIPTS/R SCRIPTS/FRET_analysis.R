@@ -111,7 +111,7 @@ names(temp_fret_N)[1] <- names(fret)[2]
 
 #Guardar archivo con datos normalizados
 write.table(x = temp_fret_N, sep = ",", row.names = FALSE, 
-            quote = FALSE, file = "DATA/DATA FOR R/FRET/FRET MEDIA/DATA_A/IDRFT_media_Rep1.P1N.")
+            quote = FALSE, file = "DATA/DATA FOR R/FRET/FRET ALTA/DATA/IDRFT_alta_Rep1.P1N.")
 
 
 
@@ -181,11 +181,11 @@ spectra_fret <- function(x) {
 #Para x = 5, construct = 2
 #Para x = 13, construct = 3
 
-spectra_fret(x = 25)
+spectra_fret(x = 29)
 
 #Guardar gráficos individualmente
 
-ggsave(plot = plot, filename = "DATA/DATA FOR R/FRET/FRET ALTA/PLOTS/IDRFT_alta_141.png", 
+ggsave(filename = "DATA/DATA FOR R/FRET/FRET ALTA/PLOTS/IDRFT_alta_141.png", 
        device = "png", width = 8, height = 5, units = "in", 
        dpi = 650)
 
@@ -254,12 +254,12 @@ for (a in temp_vec) {
 
 #Obtención cociente DxAm y DxDm----
 
+
 #Obtención cociente DxAm y DxDm----
 
 #Obtener los datos de fluorescencia del donador a 475. 
 #Filtrar de "fret" las fluorescencias para cada constructo
 #en un dataframe
-
 
 
 #Extraer la cantidad de constructos que tienen los datos
@@ -284,12 +284,12 @@ for (a in seq(1,length(fret[,-c(1,2)]),12)) {
   
 }
 
-  
+
 temp_df[,length(temp_df) + 1] <- c(475, 525)
 temp_df <- temp_df[,c(13,1:12)]
 names(temp_df)[1] <- names(fret)[2]
 temp_name <- c(rep(paste0("NaCl_", "0M"),3), rep(paste0("NaCl_", "0.5M"),3),
-  rep(paste0("NaCl_", "1M"),3), rep(paste0("NaCl_", "1.5M"),3))
+               rep(paste0("NaCl_", "1M"),3), rep(paste0("NaCl_", "1.5M"),3))
 #Agreagr nombres a las columnas por condición
 names(temp_df)[2:13] <- temp_name
 
@@ -302,12 +302,73 @@ temp <- t(temp_df[c(1,2),-1])
 temp[,length(temp) + 1] <- c(rep(paste0("NaCl_", "0M"),3), rep(paste0("NaCl_", "0.5M"),3),
                              rep(paste0("NaCl_", "1M"),3), rep(paste0("NaCl_", "1.5M"),3))
 
+#Generar dataframe para los datos normalizados----
+
+temp <- data.frame(matrix(ncol = 7, 
+                          nrow = (12*length(fret[,-c(1,2)])/12)))
+
+#Agregar los nombres a las columnas
+names(temp)[1] <- "Tratamiento"
+names(temp)[2] <- "DxAm"
+names(temp)[3] <- "DxDm"
+names(temp)[4] <- "DxAm/DxDm"
+names(temp)[5] <- "Promedio"
+names(temp)[6] <- "Normalización"
+names(temp)[7] <- "Replica"
+
+#Agregar columna de tratamiento
+temp$Tratamiento <- rep(c(0,0.5,1,1.5), each = 3)
+
+#Agregar columna de DxAm. Extraer de "temp_df" todos los datos
+#de longitud de onda 525 en orden
+
+temp_vec_525 <- c() #vector vacío
+temp_vec <- temp_df[seq(2, 16, by = 2),-1]
+for (a in 1:nrow(temp_df[seq(2, 16, by = 2),-1])) {
+  
+  temp_vec_525 <- c(temp_vec_525, as.numeric(temp_vec[a,]))
+  
+}
 
 
+#Agregar columna de DxDm. Extraer de "temp_df" todos los datos
+#de longitud de onda 475 en orden
+
+temp_vec_475 <- c() #vector vacío
+temp_vec <- temp_df[seq(1, 16, by = 2),-1]
+for (a in 1:nrow(temp_df[seq(1, 16, by = 2),-1])) {
+  
+  temp_vec_475 <- c(temp_vec_475, as.numeric(temp_vec[a,]))
+  
+}
 
 
+#Añadir columnas finales
+temp$DxAm <- temp_vec_525
+temp$DxDm <- temp_vec_475
+
+#Agregar el cociente DxAm/DxDm
+temp$`DxAm/DxDm` <- temp_vec_525/temp_vec_475
 
 
+#Agregar el promedio de DxAM/DxDm del tratamiento a 
+#0 NaCl para cada constructo 
 
+#Extraer todos los datos para NaCl 0 de cada constructo
+#y sumarlos
+h <- temp[seq(1, nrow(temp), 12),4]
+i <- temp[(seq(1, nrow(temp), 12) + 1),4]
+j <- temp[(seq(1, nrow(temp), 12) + 2),4]
 
+#Sumar todos los datos y dividirlos entre tres. Añadir
+#cada valor del vector cada 12 veces para que corresponda
+#con el valor de cada constructo a NaCl 0M
+temp$Promedio <- rep((h + i + j)/(3), each = 12)
+
+#Dividir cada valor del promedio con el valor de la columna
+#DxAm/DxDm para obtener la normalización
+temp$Normalización <- (temp$`DxAm/DxDm`)/(temp$Promedio)
+
+#Añadir la replica con la que se está trabajando (revisar)
+temp$Replica <- 1
 
