@@ -1,5 +1,4 @@
-# Proyecto: Factores de transcripción. LAB-103, FQ, UNAM
-#### En este repositorio se encuentran los datos y scripts necesarios para relizar el análisis de los factores de transcripción de _Arabidopsis thaliana_. el análisis inicial se realizó empleando *Bash*, posteriormente *R* y finalmente en *Python*. No es necesario ejecutar los scripts de *Bash*. 
-
-## Contacto
-cesarponce.csp@outlook.com
+## Proyecto: Factores de transcripción. LAB-103, FQ, UNAM
+### This repository stores all the needed information to replicate the *Arabidopsis thaliana* proteome database and transcription factors database. 
+## Contact
+Issues with this repository, please send them via email: cesarponce.csp@outlook.com
