@@ -269,7 +269,7 @@ FRET.data <- function(dir.input, dir.output) {
           #la Normalized
           
           #Generar dataframe para los datos normalizados
-          temp_rep <- data.frame(matrix(ncol = 8, 
+          temp_rep <- data.frame(matrix(ncol = 9, 
                                         nrow = (12*length(fret[, -c(1,2)])/12)))
           
           #Agregar los nombres a las columnas
@@ -281,6 +281,7 @@ FRET.data <- function(dir.input, dir.output) {
           names(temp_rep)[6] <- "Normalized"
           names(temp_rep)[7] <- "Replicate"
           names(temp_rep)[8] <- "Construct"
+          names(temp_rep)[9] <- "Plate"
           
           
           # Crear condicional para el Treatment
@@ -288,13 +289,14 @@ FRET.data <- function(dir.input, dir.output) {
             
             #Agregar columna de Treatment
             temp_rep$Treatment <- rep(c(0, 200, 400, 600), each = 3)
-            
+            temp_rep$Plate <- 1
           }
           
           if (plate == 2) {
             
             #Agregar columna de Treatment
             temp_rep$Treatment <- rep(c(0, 800, 1000, 1500), each = 3)
+            temp_rep$Plate <- 2
             
           }
           
