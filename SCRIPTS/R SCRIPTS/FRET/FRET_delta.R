@@ -13,16 +13,6 @@ FRET.delta <- function(dir.bios, format.plot = "pdf") {
   temp_sd <- c()
   temp_names <- c()
   
-  # Construir dataframe para guardar datos 
-  fret_delta <- data.frame(matrix(nrow = length(temp_files), 
-                                  ncol = 3))
-  
-  # Agregar nombres a las columnas
-  names(fret_delta)[1] <- "construct"
-  names(fret_delta)[2] <- "mean_delta"
-  names(fret_delta)[3] <- "sd_delta"
-  
-  
   # Analizar cada biosensor
   for (bios in temp_files) {
     
@@ -55,7 +45,17 @@ FRET.delta <- function(dir.bios, format.plot = "pdf") {
     
   }
 
-    # Agregar columna de media
+  # Construir dataframe para guardar datos 
+  fret_delta <- data.frame(matrix(nrow = length(temp_names), 
+                                  ncol = 3))
+  
+  # Agregar nombres a las columnas
+  names(fret_delta)[1] <- "construct"
+  names(fret_delta)[2] <- "mean_delta"
+  names(fret_delta)[3] <- "sd_delta"
+  
+  
+  # Agregar columna de media
   fret_delta$mean_delta <- temp_mean
   
   # Agregar columna de desviación estándar
@@ -102,4 +102,6 @@ FRET.delta <- function(dir.bios, format.plot = "pdf") {
          width = 5, height = 4, units = "in", dpi = 450)
   
 }
+
+
 
