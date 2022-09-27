@@ -11,6 +11,7 @@ FRET.delta <- function(dir.bios, format.plot = "pdf") {
   # Crear vector vacío para guardar datos
   temp_mean <- c()
   temp_sd <- c()
+  temp_names <- c()
   
   # Construir dataframe para guardar datos 
   fret_delta <- data.frame(matrix(nrow = length(temp_files), 
@@ -21,9 +22,6 @@ FRET.delta <- function(dir.bios, format.plot = "pdf") {
   names(fret_delta)[2] <- "mean_delta"
   names(fret_delta)[3] <- "sd_delta"
   
-  # Agregar columna con nombres de biosensores
-  fret_delta$construct <- temp_files
-  
   
   # Analizar cada biosensor
   for (bios in temp_files) {
@@ -33,6 +31,9 @@ FRET.delta <- function(dir.bios, format.plot = "pdf") {
     
     # Verificar si existe el archivo del biosensor
     if (file.exists(temp_path) == TRUE) {
+      
+      # Nombres de biosensores presentes
+      temp_names[length(temp_names) + 1] <- bios 
       
       # Cargar archivo
       fret_ratio <- read.csv(file = file.path(dir.bios, bios, "DATA", paste0(bios, ".csv")), 
@@ -53,12 +54,15 @@ FRET.delta <- function(dir.bios, format.plot = "pdf") {
     }
     
   }
-  
-  # Agregar columna de media
+
+    # Agregar columna de media
   fret_delta$mean_delta <- temp_mean
   
   # Agregar columna de desviación estándar
   fret_delta$sd_delta <- temp_sd
+  
+  # Agregar columna con los nombres
+  fret_delta$construct <- temp_names
   
   # Guardar archivo con los datos de delta FRET
   write.csv(x = fret_delta, 
@@ -82,7 +86,7 @@ FRET.delta <- function(dir.bios, format.plot = "pdf") {
     geom_errorbar(data = fret_delta, aes(x = mean_delta, 
                                          y = as.factor(construct), 
                                          xmin = mean_delta - sd_delta, 
-                                         xmax = mean_delta + sd_delta)) +
+                                         xmax = mean_delta + sd_delta), width = 0.5) +
     labs(x = expression(Delta * "FRET"), 
          y = "IDR") +
     theme_bw() +
@@ -98,3 +102,4 @@ FRET.delta <- function(dir.bios, format.plot = "pdf") {
          width = 5, height = 4, units = "in", dpi = 450)
   
 }
+
