@@ -75,9 +75,9 @@ FRET.data <- function(dir.input, dir.output) {
           
           # Cargar archivo de excel
           fret <- readxl::read_excel(path = file.path(dir.input, reps, bios, 
-                                                                      paste0(plate, ".xlsx")),
-                                                     sheet = 1, 
-                                                     col_names = FALSE)[-c(1:9), ]
+                                                      paste0(plate, ".xlsx")),
+                                     sheet = 1, 
+                                     col_names = FALSE)[-c(1:9), ]
           
           #Agregar los nombres a las columnas para identificarlas
           names(fret)[1:length(names(fret))] <- unlist(fret[2, ], use.names = FALSE)
@@ -88,7 +88,9 @@ FRET.data <- function(dir.input, dir.output) {
           #Crear un dataframe con el numero de columnas según
           #la cantidad de datos por analizar
           temp_fret <- data.frame(matrix(ncol = (length(fret[, -c(1, 2)])/(3)), 
-                                         nrow = nrow(fret)))
+                                         nrow = nrow(fret)), 
+                                  check.rows = FALSE, 
+                                  row.names = NULL)
           temp_vec <- c()
           for (a in 1:length(temp_fret)) {
             
@@ -143,6 +145,9 @@ FRET.data <- function(dir.input, dir.output) {
           temp <- (t(temp_fret[temp_fret[, 1] == as.character(515),
                                c(2:length(temp_fret))]))
           rownames(temp) <- NULL
+          
+          # Coercionar explicitamente a un vector
+          temp <- as.vector(temp)
           
           #Emplear el vector "temp" creado para normalizar
           #cada valor de "temp_fret"
@@ -361,37 +366,37 @@ FRET.data <- function(dir.input, dir.output) {
           # constructo de forma independiente
           
           # Evaluar réplica 1
-          if (reps == temp_files[1] && plate == 1) {
+          if (reps == temp_files[1] & plate == 1) {
             
             temp_rep1 <- temp_rep
             
           } 
           
-          if (reps == temp_files[1] && plate == 2) {
+          if (reps == temp_files[1] & plate == 2) {
             
             temp_rep2 <- temp_rep
             
           } 
           
-          if (reps == temp_files[2] && plate == 1) {
+          if (reps == temp_files[2] & plate == 1) {
             
             temp_rep3 <- temp_rep
             
           } 
           
-          if (reps == temp_files[2] && plate == 2) {
+          if (reps == temp_files[2] & plate == 2) {
             
             temp_rep4 <- temp_rep
             
           } 
           
-          if (reps == temp_files[3] && plate == 1) {
+          if (reps == temp_files[3] & plate == 1) {
             
             temp_rep5 <- temp_rep
             
           } 
           
-          if (reps == temp_files[3] && plate == 2) {
+          if (reps == temp_files[3] & plate == 2) {
             
             temp_rep6 <- temp_rep
             
@@ -400,24 +405,105 @@ FRET.data <- function(dir.input, dir.output) {
           
           if (exists("temp_rep6") == TRUE) {
             
-            #Juntar dataframes
-            fret_all <- rbind(temp_rep1, temp_rep2, temp_rep3, 
-                              temp_rep4, temp_rep5, temp_rep6)
+            # Verificar similiutd de biosensores
             
-            #Guardar archivo con todos los datos del constructo
-            write.csv(x = fret_all,
-                      file = file.path(dir.output, "FRET", bios, "DATA",
-                                       paste0(bios, ".csv")
-                      ),
-                      row.names = FALSE,
-                      quote = FALSE 
-            )
+            if (temp_rep1$Construct[1] == bios & 
+                temp_rep2$Construct[1] == bios & 
+                temp_rep3$Construct[1] == bios &
+                temp_rep4$Construct[1] == bios &
+                temp_rep5$Construct[1] == bios & 
+                temp_rep6$Construct[1] == bios) {
+              
+              #Juntar dataframes
+              fret_all <- rbind(temp_rep1, temp_rep2, temp_rep3, 
+                                temp_rep4, temp_rep5, temp_rep6)
+              
+              #Guardar archivo con todos los datos del constructo
+              write.csv(x = fret_all,
+                        file = file.path(dir.output, "FRET", bios, "DATA",
+                                         paste0(bios, ".csv")
+                        ),
+                        row.names = FALSE,
+                        quote = FALSE 
+              )
+              
+              # Eliminar variable fret_all para el siguiente biosensor
+              if (exists("fret_all") == TRUE) {
+                
+                remove(... = fret_all)
+                
+              }
+            }
+          }
+          
+          # Condicional para menos de tres réplicas
+          if (exists("temp_rep6") == FALSE) {
+          
+          # Juntar los datos que tengan solo una réplica
+          if (exists("temp_rep1") == TRUE &
+              exists("temp_rep2") == TRUE &
+              exists("temp_rep3") == FALSE) {
             
-            # Eliminar variable fret_all para el siguiente biosensor
-            if (exists("fret_all") == TRUE) {
+            # Verificar similiutd de biosensores
+            
+            if (temp_rep1$Construct[1] == bios &
+                temp_rep2$Construct[1] == bios) {
               
-              remove(... = fret_all)
+              #Juntar dataframes
+              fret_all <- rbind(temp_rep1, temp_rep2)
               
+              #Guardar archivo con todos los datos del constructo
+              write.csv(x = fret_all,
+                        file = file.path(dir.output, "FRET", bios, "DATA",
+                                         paste0(bios, "test1", ".csv")
+                        ),
+                        row.names = FALSE,
+                        quote = FALSE 
+              )
+              
+              # Eliminar variable fret_all para el siguiente biosensor
+              if (exists("fret_all") == TRUE) {
+                
+                remove(... = fret_all)
+                
+              }
+            }
+          }
+        }
+          
+          # Juntar los datos que tengan dos réplicas
+          if (exists("temp_rep1") == TRUE &
+              exists("temp_rep2") == TRUE &
+              exists("temp_rep3") == TRUE &
+              exists("temp_rep4") == TRUE &
+              exists("temp_rep5") == FALSE) {
+            
+            # Verificar similiutd de biosensores
+            
+            if (temp_rep1$Construct[1] == bios & 
+                temp_rep2$Construct[1] == bios &
+                temp_rep3$Construct[1] == bios &
+                temp_rep4$Construct[1] == bios) {
+              
+              #Juntar dataframes
+              fret_all <- rbind(temp_rep1, temp_rep2, 
+                                temp_rep3, temp_rep4)
+              
+              #Guardar archivo con todos los datos del constructo
+              write.csv(x = fret_all,
+                        file = file.path(dir.output, "FRET", bios, "DATA",
+                                         paste0(bios, "test", ".csv")
+                        ),
+                        row.names = FALSE,
+                        quote = FALSE 
+              )
+              
+              # Eliminar variable fret_all para el siguiente biosensor
+              if (exists("fret_all") == TRUE) {
+                
+                remove(... = fret_all)
+                
+              }
             }
           }
           
