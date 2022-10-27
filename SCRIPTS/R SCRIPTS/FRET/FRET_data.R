@@ -1,3 +1,4 @@
+# Funci?n de an?lisis de espectros de FRET----
 FRET.data <- function(dir.input, dir.output) {
   
   # Crear carpeta para guardar los archivos analizados
@@ -5,7 +6,7 @@ FRET.data <- function(dir.input, dir.output) {
   temp_dir <- file.path(dir.output, sub_dir)
   dir.create(temp_dir, showWarnings = FALSE)
   
-  # Obtener el nombre de la carpeta de las réplicas
+  # Obtener el nombre de la carpeta de las r?plicas
   temp_files <- list.files(dir.input)
   
   # Obtener los nombres de los biosensores en cada carpeta
@@ -29,20 +30,6 @@ FRET.data <- function(dir.input, dir.output) {
       
     }
   }
-  
-  # Utilizar solamente aquél vector donde haya mayor cantidad de valores
-  a <- length(temp_rep1)
-  b <- length(temp_rep2)
-  c <- length(temp_rep3)
-  
-  # Juntar vectores
-  d <- c(a, b, c)
-  
-  # Extraer el vector de mayor longitud
-  d[1]
-  
-  
-  
   
   # Generar carpetas con los nombres de los biosensores analizado
   
@@ -95,15 +82,13 @@ FRET.data <- function(dir.input, dir.output) {
           #Agregar los nombres a las columnas para identificarlas
           names(fret)[1:length(names(fret))] <- unlist(fret[2, ], use.names = FALSE)
           
-          #Eliminar el primer renglón 
+          #Eliminar el primer rengl?n 
           fret <- fret[-c(1, 2), ]
           
-          #Crear un dataframe con el numero de columnas según
+          #Crear un dataframe con el numero de columnas seg?n
           #la cantidad de datos por analizar
           temp_fret <- data.frame(matrix(ncol = (length(fret[, -c(1, 2)])/(3)), 
-                                         nrow = nrow(fret)), 
-                                  check.rows = FALSE, 
-                                  row.names = NULL)
+                                         nrow = nrow(fret)))
           temp_vec <- c()
           for (a in 1:length(temp_fret)) {
             
@@ -112,18 +97,18 @@ FRET.data <- function(dir.input, dir.output) {
             
           }
           
-          #Agregar nombres específicos a cada una de las
+          #Agregar nombres espec?ficos a cada una de las
           #columnas del dataframe
           colnames(temp_fret) <- temp_vec
           
-          #Obtener Mean de cada condición para cada
+          #Obtener Mean de cada condici?n para cada
           #una de las longitudes de onda
           
           temp_df <- data.frame(matrix(ncol = 4, nrow = 91))
           for (a in (seq(from = 1, to = length(fret[, -c(1, 2)]), by = 3) + 2)) {
             
             #Obtener los valores para cada longitud
-            #de onda para cada condición
+            #de onda para cada condici?n
             temp <- as.numeric(unlist((fret[, a])))
             temp_df[, 1] <- temp
             
@@ -153,14 +138,11 @@ FRET.data <- function(dir.input, dir.output) {
           temp_fret <- temp_fret[, c(length(temp_fret), 1:(length(temp_fret) - 1))]
           names(temp_fret)[1] <- names(fret)[2]
           
-          #Normalizar fluorescencia con punto isosbéstico
+          #Normalizar fluorescencia con punto isosb?stico
           
           temp <- (t(temp_fret[temp_fret[, 1] == as.character(515),
                                c(2:length(temp_fret))]))
           rownames(temp) <- NULL
-          
-          # Coercionar explicitamente a un vector
-          temp <- as.vector(temp)
           
           #Emplear el vector "temp" creado para normalizar
           #cada valor de "temp_fret"
@@ -177,7 +159,7 @@ FRET.data <- function(dir.input, dir.output) {
           
           if (plate == 1) {
             
-            # Agregar nombres específicos a cada una de las
+            # Agregar nombres espec?ficos a cada una de las
             # columnas del dataframe
             colnames(temp_fret_N) <- temp_vec
             
@@ -191,7 +173,7 @@ FRET.data <- function(dir.input, dir.output) {
             temp_vec[3] <- "Condition_7"
             temp_vec[4] <- "Condition_8"
             
-            # Agregar nombres específicos a cada una de las
+            # Agregar nombres espec?ficos a cada una de las
             # columnas del dataframe
             colnames(temp_fret_N) <- temp_vec
             
@@ -210,13 +192,13 @@ FRET.data <- function(dir.input, dir.output) {
           temp_fret_N <- temp_fret_N[, c(length(temp_fret_N), 1:(length(temp_fret_N) - 1))]
           names(temp_fret_N)[1] <- names(fret)[2]
           
-          # Añadir columna con la réplica
+          # A?adir columna con la r?plica
           temp_fret_N$Replicate <- reps
           
-          # Añadir columna con número de placa
+          # A?adir columna con n?mero de placa
           temp_fret_N$Plate <- plate
           
-          # Añadir columna con el biosensor
+          # A?adir columna con el biosensor
           temp_fret_N$Construct <- bios
           
           # Guardar archivo en las carpetas "DATA" de cada biosensor
@@ -231,7 +213,7 @@ FRET.data <- function(dir.input, dir.output) {
           
           
           
-          # Obtención cociente DxAm y DxDm
+          # Obtenci?n cociente DxAm y DxDm
           # Extraer la cantidad de constructos que tienen los datos
           i <- length(fret[, -c(1, 2)])/12 # Cantidad de constructos
           
@@ -244,8 +226,8 @@ FRET.data <- function(dir.input, dir.output) {
           temp_rep <- fret[fret$`Wavelength [nm]` == "475" | 
                              fret$`Wavelength [nm]` == "525", ]
           
-          temp_vec <- c() #vector vacío
-          #Ejecutar código
+          temp_vec <- c() #vector vac?o
+          #Ejecutar c?digo
           for (a in seq(1, length(fret[, -c(1, 2)]), 12)) {
             
             temp_vec <- temp_rep[, seq(a + 2, a + 13)]
@@ -266,7 +248,7 @@ FRET.data <- function(dir.input, dir.output) {
             temp_name <- c(rep(paste0("NaCl_", "0mM"), 3), rep(paste0("NaCl_", "200mM"), 3),
                            rep(paste0("NaCl_", "400mM"), 3), rep(paste0("NaCl_", "600mM"), 3))
             
-            #Agreagr nombres a las columnas por condición
+            #Agreagr nombres a las columnas por condici?n
             names(temp_df)[2:length(temp_df)] <- temp_name
             
           }
@@ -277,7 +259,7 @@ FRET.data <- function(dir.input, dir.output) {
             temp_name <- c(rep(paste0("NaCl_", "0mM"), 3), rep(paste0("NaCl_", "800mM"), 3),
                            rep(paste0("NaCl_", "1000mM"), 3), rep(paste0("NaCl_", "1500mM"), 3))
             
-            #Agreagr nombres a las columnas por condición
+            #Agreagr nombres a las columnas por condici?n
             names(temp_df)[2:length(temp_df)] <- temp_name
             
           }
@@ -322,7 +304,7 @@ FRET.data <- function(dir.input, dir.output) {
           #Agregar columna de DxAm. Extraer de "temp_df" todos los datos
           #de longitud de onda 525 en orden
           
-          temp_vec_525 <- c() #vector vacío
+          temp_vec_525 <- c() #vector vac?o
           temp_vec <- temp_df[seq(2, nrow(temp_df), by = 2), -1]
           for (a in 1:nrow(temp_df[seq(2, nrow(temp_df), by = 2), -1])) {
             
@@ -334,7 +316,7 @@ FRET.data <- function(dir.input, dir.output) {
           #Agregar columna de DxDm. Extraer de "temp_df" todos los datos
           #de longitud de onda 475 en orden
           
-          temp_vec_475 <- c() #vector vacío
+          temp_vec_475 <- c() #vector vac?o
           temp_vec <- temp_df[seq(1, nrow(temp_df), by = 2), -1]
           for (a in 1:nrow(temp_df[seq(1, nrow(temp_df), by = 2), -1])) {
             
@@ -342,7 +324,7 @@ FRET.data <- function(dir.input, dir.output) {
             
           }
           
-          #Añadir columnas finales
+          #A?adir columnas finales
           temp_rep$DxAm <- temp_vec_525
           temp_rep$DxDm <- temp_vec_475
           
@@ -358,7 +340,7 @@ FRET.data <- function(dir.input, dir.output) {
           i <- temp_rep[(seq(1, nrow(temp_rep), 12) + 1), 4]
           j <- temp_rep[(seq(1, nrow(temp_rep), 12) + 2), 4]
           
-          #Sumar todos los datos y dividirlos entre tres. Añadir
+          #Sumar todos los datos y dividirlos entre tres. A?adir
           #cada valor del vector cada 12 veces para que corresponda
           #con el valor de cada constructo a NaCl 0M
           temp_rep$Mean <- rep((h + i + j)/(3), each = 12)
@@ -367,165 +349,77 @@ FRET.data <- function(dir.input, dir.output) {
           #DxAm/DxDm para obtener la Normalized
           temp_rep$Normalized <- (temp_rep$`DxAm/DxDm`)/(temp_rep$Mean)
           
-          #Añadir la Replicate con la que se está trabajando (revisar)
+          #A?adir la Replicate con la que se est? trabajando (revisar)
           temp_rep$Replicate <- as.numeric(substr(start = nchar(reps), 
                                                   stop = nchar(reps), 
                                                   x = reps))
           
-          # Añadir el biosensor analizado
+          # A?adir el biosensor analizado
           temp_rep$Construct <- bios
           
           # Generar seis variables para guardar los datos de cada
           # constructo de forma independiente
           
-          # Evaluar réplica 1
-          if (reps == temp_files[1] & plate == 1) {
+          # Evaluar r?plica 1
+          if (reps == temp_files[1] && plate == 1) {
             
             temp_rep1 <- temp_rep
             
           } 
           
-          if (reps == temp_files[1] & plate == 2) {
+          if (reps == temp_files[1] && plate == 2) {
             
             temp_rep2 <- temp_rep
             
           } 
           
-          if (reps == temp_files[2] & plate == 1) {
+          if (reps == temp_files[2] && plate == 1) {
             
             temp_rep3 <- temp_rep
             
           } 
           
-          if (reps == temp_files[2] & plate == 2) {
+          if (reps == temp_files[2] && plate == 2) {
             
             temp_rep4 <- temp_rep
             
           } 
           
-          if (reps == temp_files[3] & plate == 1) {
+          if (reps == temp_files[3] && plate == 1) {
             
             temp_rep5 <- temp_rep
             
           } 
           
-          if (reps == temp_files[3] & plate == 2) {
+          if (reps == temp_files[3] && plate == 2) {
             
             temp_rep6 <- temp_rep
             
           } 
           
-          if (exists("temp_rep6") == FALSE) {
-            
-            # Juntar los datos que tengan solo una réplica
-            if (exists("temp_rep1") == TRUE &
-                exists("temp_rep2") == TRUE &
-                exists("temp_rep3") == FALSE) {
-              
-              # Verificar similiutd de biosensores
-              
-              if (temp_rep1$Construct[1] == bios &
-                  temp_rep2$Construct[1] == bios) {
-                
-                #Juntar dataframes
-                fret_all <- rbind(temp_rep1, temp_rep2)
-                
-                #Guardar archivo con todos los datos del constructo
-                write.csv(x = fret_all,
-                          file = file.path(dir.output, "FRET", bios, "DATA",
-                                           paste0(bios, "_rep1", ".csv")
-                          ),
-                          row.names = FALSE,
-                          quote = FALSE 
-                )
-                
-                # Eliminar variable fret_all para el siguiente biosensor
-                if (exists("fret_all") == TRUE) {
-                  
-                  remove(... = fret_all)
-                  
-                }
-              }
-            }
-          }
-          
-          
-          if (exists("temp_rep6") == FALSE) {
-            
-            
-            # Juntar los datos que tengan dos réplicas
-            if (exists("temp_rep1") == TRUE &
-                exists("temp_rep2") == TRUE &
-                exists("temp_rep3") == TRUE &
-                exists("temp_rep4") == TRUE &
-                exists("temp_rep5") == FALSE) {
-              
-              # Verificar similiutd de biosensores
-              
-              if (temp_rep1$Construct[1] == bios & 
-                  temp_rep2$Construct[1] == bios &
-                  temp_rep3$Construct[1] == bios &
-                  temp_rep4$Construct[1] == bios) {
-                
-                #Juntar dataframes
-                fret_all <- rbind(temp_rep1, temp_rep2, 
-                                  temp_rep3, temp_rep4)
-                
-                #Guardar archivo con todos los datos del constructo
-                write.csv(x = fret_all,
-                          file = file.path(dir.output, "FRET", bios, "DATA",
-                                           paste0(bios, "_rep2", ".csv")
-                          ),
-                          row.names = FALSE,
-                          quote = FALSE 
-                )
-                
-                # Eliminar variable fret_all para el siguiente biosensor
-                if (exists("fret_all") == TRUE) {
-                  
-                  remove(... = fret_all)
-                  
-                }
-              }
-            }
-          }
-          
-          
           
           if (exists("temp_rep6") == TRUE) {
             
-            # Verificar similiutd de biosensores
+            #Juntar dataframes
+            fret_all <- rbind(temp_rep1, temp_rep2, temp_rep3, 
+                              temp_rep4, temp_rep5, temp_rep6)
             
-            if (temp_rep1$Construct[1] == bios & 
-                temp_rep2$Construct[1] == bios & 
-                temp_rep3$Construct[1] == bios &
-                temp_rep4$Construct[1] == bios &
-                temp_rep5$Construct[1] == bios & 
-                temp_rep6$Construct[1] == bios) {
+            #Guardar archivo con todos los datos del constructo
+            write.csv(x = fret_all,
+                      file = file.path(dir.output, "FRET", bios, "DATA",
+                                       paste0(bios, ".csv")
+                      ),
+                      row.names = FALSE,
+                      quote = FALSE 
+            )
+            
+            # Eliminar variable fret_all para el siguiente biosensor
+            if (exists("fret_all") == TRUE) {
               
-              #Juntar dataframes
-              fret_all <- rbind(temp_rep1, temp_rep2, temp_rep3, 
-                                temp_rep4, temp_rep5, temp_rep6)
+              remove(... = fret_all)
               
-              #Guardar archivo con todos los datos del constructo
-              write.csv(x = fret_all,
-                        file = file.path(dir.output, "FRET", bios, "DATA",
-                                         paste0(bios, "_all_reps", ".csv")
-                        ),
-                        row.names = FALSE,
-                        quote = FALSE 
-              )
-              
-              # Eliminar variable fret_all para el siguiente biosensor
-              if (exists("fret_all") == TRUE) {
-                
-                remove(... = fret_all)
-                
-              }
             }
           }
-          
-          # Condicional para menos de tres réplicas
           
         } else {
           
@@ -536,4 +430,5 @@ FRET.data <- function(dir.input, dir.output) {
     } 
   }
 }
+
 
