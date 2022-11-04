@@ -27,9 +27,11 @@ for (a in list_names) {
   }
 }
 
+# Ordenar columna por constructo
+all_bios <- all_bios[order(all_bios$Construct, decreasing = FALSE), ]
+
 # Guardar archivo
 write.csv(x = all_bios,
           row.names = FALSE, quote = FALSE,
           file = "C:/Users/HP/Desktop/FRET R SCRIPTS/all_biosensors.csv")
-
 
