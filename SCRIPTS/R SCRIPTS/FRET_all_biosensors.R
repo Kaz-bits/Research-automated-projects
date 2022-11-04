@@ -1,0 +1,35 @@
+# En este script se encuentran los comandos necesarios 
+# para juntar todos los datos del cociente FRET de los 
+# 200 biosensores analizados
+
+
+# Obtener el nombre de todos los biosensores
+list_names <- list.files(path = "E:/Screenig biblioteca/FRET/")[-c(181, 182)]
+
+# Contruir data frame para juntar todos los datos
+all_bios <- data.frame()
+for (a in list_names) {
+  
+  # Directorio del archivo
+  temp_file <- file.path("E:/Screenig biblioteca/FRET", a, "DATA", 
+                         paste0(a, ".csv"))
+  
+  # Verificar si existe el archivo
+  temp <- file.exists(temp_file)
+  if (temp == TRUE) {
+    
+    # Cargar archivos
+    temp_file <- read.csv(file = file.path(temp_file), header = TRUE)
+    
+    # Juntar los datos
+    all_bios <- rbind(temp_file, all_bios)
+    
+  }
+}
+
+# Guardar archivo
+write.csv(x = all_bios,
+          row.names = FALSE, quote = FALSE,
+          file = "C:/Users/HP/Desktop/FRET R SCRIPTS/all_biosensors.csv")
+
+
