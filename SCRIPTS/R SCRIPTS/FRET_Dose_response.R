@@ -9,7 +9,6 @@ library(broom)
 df_fret_200 <- read.csv(file = "C:/Users/HP/Desktop/FRET R SCRIPTS/all_biosensors.csv", 
                          header = TRUE, sep = ",")
 
-
 # Contruir modelo no lineal ----
 
 # Obtener los nombres de los constructos del
@@ -39,11 +38,12 @@ for (a in list_names) {
     summarise("Mean" = mean(Normalized))
   
   # Predecir modelo no lineal
-  fit <- drm(Mean ~ Treatment, data = temp_summary, 
-             fct = W2.4())
+  fit <- drm(formula = Mean ~ Treatment, 
+             data = temp_summary, 
+             fct = LL.4())
   
   # Crear nuevos datos para la curva del modelo
-  newdata <- expand.grid(Treatment = exp(seq(log(0.001), log(2), length = 100)))
+  newdata <- expand.grid(Treatment = exp(seq(0, 10, length = 100)))
   
   # Predecir intervalos de confianza
   pm <- predict(fit, newdata = newdata, interval = "confidence")
@@ -62,28 +62,23 @@ for (a in list_names) {
 
 
 # Graficar la curva con los datos
-
-ggplot(temp_summary, aes(x = Treatment, y = Mean)) +
+ggplot() +
   geom_line(data = temp_newdata, 
-            aes(x = Treatment, y = p, group = Construct, color = Construct),
-            size = 1, color = "gray", 
-            lty = 1, alpha = 0.6, show.legend = FALSE) +
+            aes(x = (Treatment/1000), y = p, group = Construct, color = Construct),
+            size = 0.7, 
+            lty = 1, alpha = 0.3, show.legend = FALSE) +
   theme_classic() +
   labs(x = "[NaCl] (M)", 
        y = "Normalized \nDxAm/DxDm") +
   theme(axis.title = element_text(size = 14),
-        axis.text = element_text(size = 12))
+        axis.text = element_text(size = 12)) +
+  coord_cartesian(xlim = c(0, 1.55), 
+                  ylim = c(0.95, 3)) +
+  scale_x_continuous(expand = c(0,0))
 
 #Guardar gráfico
-ggsave(filename = "PLOTS/FRET/Dose_response/DRFT vs SED1/DRFT_factors.pdf",
+ggsave(filename = "C:/Users/HP/Desktop/FRET R SCRIPTS/DRC_all_bios.pdf",
        device = "pdf", width = 6, height = 5, units = "in", 
-       dpi = 600) 
-
-
-t1 <- drm(Mean ~ Treatment, data = temp_summary, fct = LL.4())
-mselect(t1, list(LL.3(), LL.4(), LL.5(), W2.3(), W2.4(), W2.2()), 
-        linreg = TRUE, nested = TRUE)
-
-
+       dpi = 450) 
 
 

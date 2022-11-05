@@ -35,3 +35,4 @@ write.csv(x = all_bios,
           row.names = FALSE, quote = FALSE,
           file = "C:/Users/HP/Desktop/FRET R SCRIPTS/all_biosensors.csv")
 
+
