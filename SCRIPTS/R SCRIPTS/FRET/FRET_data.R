@@ -1,5 +1,31 @@
 # Funci?n de an?lisis de espectros de FRET----
 FRET.data <- function(dir.input, dir.output) {
+
+  # Obtener biosensores evaluados
+  temp_fret_file <- file.exists(dir.output)
+  
+  if (temp_fret_file == TRUE) {
+    
+    # Lista de biosensores evaluados
+    temp_bios_proc <- list.files(dir.output, "FRET")
+    
+  }
+  
+  
+  # Obtener el nombre de la carpeta de las r?plicas
+  temp_files <- list.files(dir.input)
+  
+  # Obtener biosensores por evaluar
+  temp_bios_raw <- file.exists(file.path(dir.input, temp_files[1]))
+  
+  
+  if (temp_fret_file == TRUE) {
+  
+    # Extraer biosensores por evaluar
+    temp_bios_raw[!(temp_bios_raw %in% temp_bios_proc)]
+  
+    }
+  
   
   # Crear carpeta para guardar los archivos analizados
   sub_dir <- "FRET" 
@@ -31,7 +57,7 @@ FRET.data <- function(dir.input, dir.output) {
     }
   }
   
-  # Generar carpetas con los nombres de los biosensores analizado
+  # Generar carpetas con los nombres de los biosensores analizados
   
   for (i in temp_rep_1) {
     
@@ -59,7 +85,16 @@ FRET.data <- function(dir.input, dir.output) {
     
   }
   
+    
+  # Verificar si existen nuevos biosensores
+  if (exists("temp_bios_raw") == TRUE) {
+    
+    # Cambiar datos de la variable temp_rep_1
+    temp_rep_1 <- temp_bios_raw
+    
+  }
   
+    
   # Leer cada uno de los archivos en cada carpeta
   
   for (bios in temp_rep_1) {
@@ -429,6 +464,7 @@ FRET.data <- function(dir.input, dir.output) {
       }
     } 
   }
-}
+  
+} # Fin función
 
 
