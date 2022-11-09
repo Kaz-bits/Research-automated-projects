@@ -16,15 +16,8 @@ temp1 <- df_fret_200$Construct
 temp2 <- as.numeric(substr(df_fret_200_cider$Entry, 7, 9))
 
 # Obtener datos de CIDER de biosensores analizados
-df_fret_200_cider <- df_fret_200_cider[(temp2 %in% temp1), ]
-
-# Eliminar el biosensor 201 (SED1) del data frame
-df_fret_200 <- df_fret_200[!(df_fret_200$Construct == 201), ]
-
-# Juantar los dos data frame anteriores
-df_fret_200 <- cbind(df_fret_200, df_fret_200_cider)
-
-
+eee(eetemp2 %in% temp1)
+essseweqweweqwe
 # Gráficos de correlaciones----
 
 # Gráfico de delta FRET vs Longitud
@@ -56,8 +49,7 @@ ggplot() +
            label = paste0("p = ", temp1), size = 4.5)
 
 # Guardar gráfico
-ggsave(filename = "/media/kaz-bits/TOSHIBA EXT/Project_IDP_D2P2/DATA/DATA FOR R/FRET/Data_FRET/COMPLETE_DATA/LIBRARY/PLOTS_200/FRET_vs_length.pdf", 
-       device = "pdf", 
+ggsave(filename = "PLOTS/CONS_PLOTS/FRET_vs_length.pdf", device = "pdf", 
        width = 5, height = 3, units = "in", dpi = 600)
 
 
@@ -86,13 +78,13 @@ ggplot() +
   coord_cartesian(xlim = c(min(df_fret_200$κ),
                            max(df_fret_200$κ)), 
                   ylim = c(0,2.5)) +
-  annotate(geom = "text", x = 0.08, y = 2.4, 
+  annotate(geom = "text", x = 0.075, y = 2.4, 
            label = paste0("r = ", temp), size = 4.5) +
-  annotate(geom = "text", x = 0.091, y = 2.15,
+  annotate(geom = "text", x = 0.073, y = 2.15,
            label = paste0("p = ", temp1), size = 4.5)
 
 # Guardar gráfico
-ggsave(filename = "/media/kaz-bits/TOSHIBA EXT/Project_IDP_D2P2/DATA/DATA FOR R/FRET/Data_FRET/COMPLETE_DATA/LIBRARY/PLOTS_200/FRET_vs_kappa.pdf", device = "pdf", 
+ggsave(filename = "PLOTS/CONS_PLOTS/FRET_vs_kappa.pdf", device = "pdf", 
        width = 5, height = 3, units = "in", dpi = 600)
 
 
@@ -120,13 +112,13 @@ ggplot() +
   coord_cartesian(xlim = c(min(df_fret_200$FCR),
                            max(df_fret_200$FCR)), 
                   ylim = c(0,2.5)) +
-  annotate(geom = "text", x = 0.05, y = 2.4, 
+  annotate(geom = "text", x = 0.19, y = 2.4, 
            label = paste0("r = ", temp), size = 4.5) +
-  annotate(geom = "text", x = 0.05, y = 2.15,
+  annotate(geom = "text", x = 0.19, y = 2.15,
            label = paste0("p = ", temp1), size = 4.5)
 
 # Guardar gráfico
-ggsave(filename = "/media/kaz-bits/TOSHIBA EXT/Project_IDP_D2P2/DATA/DATA FOR R/FRET/Data_FRET/COMPLETE_DATA/LIBRARY/PLOTS_200/FRET_vs_FCR.pdf", device = "pdf", 
+ggsave(filename = "PLOTS/CONS_PLOTS/FRET_vs_FCR.pdf", device = "pdf", 
        width = 5, height = 3, units = "in", dpi = 600)
 
 
@@ -134,6 +126,13 @@ ggsave(filename = "/media/kaz-bits/TOSHIBA EXT/Project_IDP_D2P2/DATA/DATA FOR R/
 
 
 # Gráfico de delta FRET vs NCPR
+temp <- signif(cor(df_fret_200$Mean_Delta,
+                   df_fret_200$NCPR,
+                   method = "pearson"), digits = 2)
+temp1 <- signif(cor.test(df_fret_200$Mean_Delta,
+                         df_fret_200$NCPR, method = "pearson")[[3]], digits = 2)
+
+
 ggplot() +
   geom_vline(xintercept = 0, lty = 2) +
   geom_jitter(data = df_fret_200, aes(x = NCPR, 
@@ -148,44 +147,7 @@ ggplot() +
                   ylim = c(0,2))
 
 # Guardar gráfico
-ggsave(filename = "/media/kaz-bits/TOSHIBA EXT/Project_IDP_D2P2/DATA/DATA FOR R/FRET/Data_FRET/COMPLETE_DATA/LIBRARY/PLOTS_200/FRET_vs_NCPR_no_correlation.pdf", 
-       device = "pdf", 
-       width = 5, height = 3, units = "in", dpi = 600)
-
-
-
-# Gráfico de delta FRET vs NCPR (correlación)
-temp <- signif(cor(df_fret_200$Mean_Delta,
-                   df_fret_200$NCPR,
-                   method = "pearson"), digits = 2)
-temp1 <- signif(cor.test(df_fret_200$Mean_Delta,
-                         df_fret_200$NCPR, method = "pearson")[[3]], digits = 2)
-
-
-ggplot() +
-  geom_jitter(data = df_fret_200, aes(x = NCPR, 
-                                      y = Mean_Delta)) +
-  geom_smooth(data = df_fret_200, aes(x = NCPR, 
-                                      y = Mean_Delta),
-              method = "lm", fill = "gray", color = "blue", alpha = 0.4) +
-  labs(x = "NCPR", 
-       y = expression(Delta * "FRET")) +
-  theme_bw() +
-  theme(axis.title = element_text(size = 14),
-        axis.text = element_text(size = 12),
-        panel.grid = element_blank()) +
-  coord_cartesian(xlim = c(min(df_fret_200$NCPR),
-                           max(df_fret_200$NCPR)), 
-                  ylim = c(0,2.5)) +
-  annotate(geom = "text", x = -0.35, y = 2.4, 
-           label = paste0("r = ", temp), size = 4.5) +
-  annotate(geom = "text", x = -0.374, y = 2.15,
-           label = paste0("p = ", temp1), size = 4.5)
-
-
-# Guardar gráfico
-ggsave(filename = "/media/kaz-bits/TOSHIBA EXT/Project_IDP_D2P2/DATA/DATA FOR R/FRET/Data_FRET/COMPLETE_DATA/LIBRARY/PLOTS_200/FRET_vs_NCPR_correlation.pdf", 
-       device = "pdf", 
+ggsave(filename = "PLOTS/CONS_PLOTS/FRET_vs_NCPR.pdf", device = "pdf", 
        width = 5, height = 3, units = "in", dpi = 600)
 
 
@@ -214,13 +176,13 @@ ggplot() +
   coord_cartesian(xlim = c(min(df_fret_200$Hydropathy),
                            max(df_fret_200$Hydropathy)), 
                   ylim = c(0,2.5)) +
-  annotate(geom = "text", x = 2.2, y = 2.4, 
+  annotate(geom = "text", x = 2.92, y = 2.4, 
            label = paste0("r = ", temp), size = 4.5) +
-  annotate(geom = "text", x = 2.16, y = 2.15,
+  annotate(geom = "text", x = 2.93, y = 2.15,
            label = paste0("p = ", temp1), size = 4.5)
 
 # Guardar gráfico
-ggsave(filename = "/media/kaz-bits/TOSHIBA EXT/Project_IDP_D2P2/DATA/DATA FOR R/FRET/Data_FRET/COMPLETE_DATA/LIBRARY/PLOTS_200/FRET_vs_Hydropathy.pdf", device = "pdf", 
+ggsave(filename = "PLOTS/CONS_PLOTS/FRET_vs_Hydropathy.pdf", device = "pdf", 
        width = 5, height = 3, units = "in", dpi = 600)
 
 
@@ -250,13 +212,13 @@ ggplot() +
   coord_cartesian(xlim = c(min(df_fret_200$`Disorder promoting`),
                            max(df_fret_200$`Disorder promoting`)), 
                   ylim = c(0,2.5)) +
-  annotate(geom = "text", x = 0.625, y = 2.4, 
+  annotate(geom = "text", x = 0.75, y = 2.4, 
            label = paste0("r = ", temp), size = 4.5) +
-  annotate(geom = "text", x = 0.616, y = 2.15,
+  annotate(geom = "text", x = 0.75, y = 2.15,
            label = paste0("p = ", temp1), size = 4.5)
 
 # Guardar gráfico
-ggsave(filename = "/media/kaz-bits/TOSHIBA EXT/Project_IDP_D2P2/DATA/DATA FOR R/FRET/Data_FRET/COMPLETE_DATA/LIBRARY/PLOTS_200/FRET_vs_disorder_promoting.pdf", device = "pdf", 
+ggsave(filename = "PLOTS/CONS_PLOTS/FRET_vs_disorder_promoting.pdf", device = "pdf", 
        width = 5, height = 3, units = "in", dpi = 600)
 
 
@@ -264,33 +226,32 @@ ggsave(filename = "/media/kaz-bits/TOSHIBA EXT/Project_IDP_D2P2/DATA/DATA FOR R/
 
 # Gráfico de delta FRET vs FRET inicial----
 temp <- signif(cor(df_fret_200$Mean_Delta,
-                   df_fret_200$FRET_0M,
+                   df_fret_200$FRET_inicial_0M,
                    method = "pearson"), digits = 2)
 temp1 <- signif(cor.test(df_fret_200$Mean_Delta,
-                         df_fret_200$FRET_0M, 
+                         df_fret_200$FRET_inicial_0M, 
                          method = "pearson")[[3]], digits = 2)
 
 
 ggplot() +
-  geom_jitter(data = df_fret_200, aes(x = FRET_0M, 
+  geom_jitter(data = df_fret_200, aes(x = FRET_inicial_0M, 
                                       y = Mean_Delta)) +
-  geom_smooth(data = df_fret_200, aes(x = FRET_0M, 
+  geom_smooth(data = df_fret_200, aes(x = FRET_inicial_0M, 
                                       y = Mean_Delta),
               method = "lm", fill = "gray", color = "blue", alpha = 0.4) +
-  labs(x = "FRET (0 M)", 
+  labs(x = "Basal FRET", 
        y = expression(Delta * "FRET")) +
   theme_bw() +
   theme(axis.title = element_text(size = 14),
         axis.text = element_text(size = 12),
         panel.grid = element_blank()) +
-  coord_cartesian(xlim = c(min(df_fret_200$FRET_0M),
-                           max(df_fret_200$FRET_0M)),
+  coord_cartesian(xlim = c(0.7,1.4), 
                   ylim = c(-0.5,2.5)) +
-  annotate(geom = "text", x = 0.48, y = 2.4, 
+  annotate(geom = "text", x = 0.75, y = 2.4, 
            label = paste0("r = ", temp), size = 4.5) +
-  annotate(geom = "text", x = 0.52, y = 2.15,
+  annotate(geom = "text", x = 0.77, y = 2.15,
            label = paste0("p = ", temp1), size = 4.5)
 
 # Guardar gráfico
-ggsave(filename = "/media/kaz-bits/TOSHIBA EXT/Project_IDP_D2P2/DATA/DATA FOR R/FRET/Data_FRET/COMPLETE_DATA/LIBRARY/PLOTS_200/delta_FRET_vs_FRET_inicial.pdf", device = "pdf", 
+ggsave(filename = "PLOTS/CONS_PLOTS/delta_FRET_vs_FRET_inicial.pdf", device = "pdf", 
        width = 5, height = 3, units = "in", dpi = 600)

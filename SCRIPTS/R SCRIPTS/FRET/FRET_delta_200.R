@@ -3,7 +3,7 @@ library(ggplot2)
 library(ggpubr)
 
 # Cargar archivo con todos los factores de transcripción
-delta_200 <- read.csv(file = "/media/kaz-bits/TOSHIBA EXT/Project_IDP_D2P2/DATA/DATA FOR R/FRET/Data_FRET/COMPLETE_DATA/LIBRARY/all_biosensors.csv",
+delta_200 <- read.csv(file = "D:/Project_IDP_D2P2/DATA/DATA FOR R/FRET/Data_FRET/COMPLETE_DATA/LIBRARY/all_biosensors.csv",
                              header = TRUE)
 
 # Obtención DELTA FRET----
@@ -81,12 +81,19 @@ for (a in (names(table(delta_200$Construct)))) {
 df_fret_200$FRET_0M <- temp
 
 
-
 # Guardar archivo
 write.csv(x = df_fret_200, file = "/media/kaz-bits/TOSHIBA EXT/Project_IDP_D2P2/DATA/DATA FOR R/FRET/Data_FRET/COMPLETE_DATA/LIBRARY/FRET_delta_200.csv", 
           row.names = FALSE, quote = FALSE)
 
 
+# Determinar la cantidad de datos arriba de SED1
+i <- df_fret_200[df_fret_200$Construct == 201, ]$Mean_Delta # DELTA de SED1
+
+# Constructor por arriba de SED1
+temp_bios <- df_fret_200[df_fret_200$Mean_Delta > i, ]$Construct
+
+# Cantidad de constructos
+length(temp_bios)
 
 # Gráfico de puntos con error----
 
