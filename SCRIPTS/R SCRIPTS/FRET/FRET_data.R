@@ -1,4 +1,8 @@
-# Funci?n de an?lisis de espectros de FRET----
+# NOTA: LOS DIRECTORIOS SE DEBEN ESCRIBIR, Y NO SE DEBEN
+# COPIAR Y PEGAR, YA QUE SE GENERAN ERRORES DE LECTURA
+# DEBIDO A CARACTERES "INSIVISIBLES"
+
+# Función de análisis de datos de FRET----
 FRET.data <- function(dir.input, dir.output) {
   
   # Crear carpeta para guardar los archivos analizados
@@ -79,14 +83,14 @@ FRET.data <- function(dir.input, dir.output) {
                                      sheet = 1, 
                                      col_names = FALSE)[-c(1:9), ]
           
-          #Agregar los nombres a las columnas para identificarlas
+          # Agregar los nombres a las columnas para identificarlas
           names(fret)[1:length(names(fret))] <- unlist(fret[2, ], use.names = FALSE)
           
-          #Eliminar el primer rengl?n 
+          # Eliminar el primer rengl?n 
           fret <- fret[-c(1, 2), ]
           
-          #Crear un dataframe con el numero de columnas seg?n
-          #la cantidad de datos por analizar
+          # Crear un dataframe con el numero de columnas seg?n
+          # la cantidad de datos por analizar
           temp_fret <- data.frame(matrix(ncol = (length(fret[, -c(1, 2)])/(3)), 
                                          nrow = nrow(fret)))
           temp_vec <- c()
@@ -97,18 +101,18 @@ FRET.data <- function(dir.input, dir.output) {
             
           }
           
-          #Agregar nombres espec?ficos a cada una de las
-          #columnas del dataframe
+          # Agregar nombres espec?ficos a cada una de las
+          # columnas del dataframe
           colnames(temp_fret) <- temp_vec
           
-          #Obtener Mean de cada condici?n para cada
-          #una de las longitudes de onda
+          # Obtener Mean de cada condici?n para cada
+          # una de las longitudes de onda
           
           temp_df <- data.frame(matrix(ncol = 4, nrow = 91))
           for (a in (seq(from = 1, to = length(fret[, -c(1, 2)]), by = 3) + 2)) {
             
-            #Obtener los valores para cada longitud
-            #de onda para cada condici?n
+            # Obtener los valores para cada longitud
+            # de onda para cada condici?n
             temp <- as.numeric(unlist((fret[, a])))
             temp_df[, 1] <- temp
             
@@ -118,34 +122,34 @@ FRET.data <- function(dir.input, dir.output) {
             temp <- as.numeric(unlist((fret[, (a + 2)])))
             temp_df[, 3] <- temp
             
-            #Obtener la media de las tres observaciones
+            # Obtener la media de las tres observaciones
             i <- (temp_df[, 1] + temp_df[, 2] + temp_df[, 3])
             h <- (length(temp_df)-1)
             
-            #Media de las condiciones
+            # Media de las condiciones
             temp <- (i/h)
             temp_df[, 4] <- temp
             
-            #Agregar cada columna con cada Mean al
-            #dataframe llamado "temp_fret"
+            # Agregar cada columna con cada Mean al
+            # dataframe llamado "temp_fret"
             
             temp_fret[, (a/3)] <- temp_df[, 4]
             
           }
           
-          #Agregar la longitud de onda en la primer columna
+          # Agregar la longitud de onda en la primer columna
           temp_fret[, length(temp_fret) + 1] <- fret$`Wavelength [nm]`
           temp_fret <- temp_fret[, c(length(temp_fret), 1:(length(temp_fret) - 1))]
           names(temp_fret)[1] <- names(fret)[2]
           
-          #Normalizar fluorescencia con punto isosb?stico
+          # Normalizar fluorescencia con punto isosb?stico
           
           temp <- (t(temp_fret[temp_fret[, 1] == as.character(515),
                                c(2:length(temp_fret))]))
           rownames(temp) <- NULL
           
-          #Emplear el vector "temp" creado para normalizar
-          #cada valor de "temp_fret"
+          # Emplear el vector "temp" creado para normalizar
+          # cada valor de "temp_fret"
           temp_fret_N <- data.frame(matrix(ncol = (length(fret[, -c(1,2)])/(3)), 
                                            nrow = nrow(fret)))
           temp_vec <- c()
@@ -179,7 +183,7 @@ FRET.data <- function(dir.input, dir.output) {
             
           }
           
-          #Normalizar los datos
+          # Normalizar los datos
           for (a in 1:nrow(temp_fret)) {
             
             i <- (temp_fret[a, -1])/(temp)
@@ -187,18 +191,18 @@ FRET.data <- function(dir.input, dir.output) {
             
           }
           
-          #Agregar la longitud de onda en la primer columna
+          # Agregar la longitud de onda en la primer columna
           temp_fret_N[, length(temp_fret_N) + 1] <- fret$`Wavelength [nm]`
           temp_fret_N <- temp_fret_N[, c(length(temp_fret_N), 1:(length(temp_fret_N) - 1))]
           names(temp_fret_N)[1] <- names(fret)[2]
           
-          # A?adir columna con la r?plica
+          # Añadir columna con la réplica
           temp_fret_N$Replicate <- reps
           
-          # A?adir columna con n?mero de placa
+          # Añadir columna con número de placa
           temp_fret_N$Plate <- plate
           
-          # A?adir columna con el biosensor
+          # Añadir columna con el biosensor
           temp_fret_N$Construct <- bios
           
           # Guardar archivo en las carpetas "DATA" de cada biosensor
@@ -213,7 +217,7 @@ FRET.data <- function(dir.input, dir.output) {
           
           
           
-          # Obtenci?n cociente DxAm y DxDm
+          # Obtención cociente DxAm y DxDm
           # Extraer la cantidad de constructos que tienen los datos
           i <- length(fret[, -c(1, 2)])/12 # Cantidad de constructos
           
@@ -221,13 +225,13 @@ FRET.data <- function(dir.input, dir.output) {
           temp_df <- data.frame(matrix(ncol = (length(fret[, -c(1, 2)])/i), 
                                        nrow = 0))
           
-          #Obtener los renglones con las fluorescencias del donador y
-          #aceptor
+          # Obtener los renglones con las fluorescencias del donador y
+          # aceptor
           temp_rep <- fret[fret$`Wavelength [nm]` == "475" | 
                              fret$`Wavelength [nm]` == "525", ]
           
-          temp_vec <- c() #vector vac?o
-          #Ejecutar c?digo
+          temp_vec <- c() # vector vac?o
+          # Ejecutar c?digo
           for (a in seq(1, length(fret[, -c(1, 2)]), 12)) {
             
             temp_vec <- temp_rep[, seq(a + 2, a + 13)]
@@ -248,7 +252,7 @@ FRET.data <- function(dir.input, dir.output) {
             temp_name <- c(rep(paste0("NaCl_", "0mM"), 3), rep(paste0("NaCl_", "200mM"), 3),
                            rep(paste0("NaCl_", "400mM"), 3), rep(paste0("NaCl_", "600mM"), 3))
             
-            #Agreagr nombres a las columnas por condici?n
+            # Agreagr nombres a las columnas por condici?n
             names(temp_df)[2:length(temp_df)] <- temp_name
             
           }
@@ -259,20 +263,20 @@ FRET.data <- function(dir.input, dir.output) {
             temp_name <- c(rep(paste0("NaCl_", "0mM"), 3), rep(paste0("NaCl_", "800mM"), 3),
                            rep(paste0("NaCl_", "1000mM"), 3), rep(paste0("NaCl_", "1500mM"), 3))
             
-            #Agreagr nombres a las columnas por condici?n
+            # Agreagr nombres a las columnas por condici?n
             names(temp_df)[2:length(temp_df)] <- temp_name
             
           }
           
-          #Una vez obtenido el dataframe con los datos de
-          #fluorescencia del donador y aceptor, realizar
-          #la Normalized
+          # Una vez obtenido el dataframe con los datos de
+          # fluorescencia del donador y aceptor, realizar
+          # la Normalized
           
-          #Generar dataframe para los datos normalizados
+          # Generar dataframe para los datos normalizados
           temp_rep <- data.frame(matrix(ncol = 9, 
                                         nrow = (12*length(fret[, -c(1,2)])/12)))
           
-          #Agregar los nombres a las columnas
+          # Agregar los nombres a las columnas
           names(temp_rep)[1] <- "Treatment"
           names(temp_rep)[2] <- "DxAm"
           names(temp_rep)[3] <- "DxDm"
@@ -287,24 +291,24 @@ FRET.data <- function(dir.input, dir.output) {
           # Crear condicional para el Treatment
           if (plate == 1) {
             
-            #Agregar columna de Treatment
+            # Agregar columna de Treatment
             temp_rep$Treatment <- rep(c(0, 200, 400, 600), each = 3)
             temp_rep$Plate <- 1
           }
           
           if (plate == 2) {
             
-            #Agregar columna de Treatment
+            # Agregar columna de Treatment
             temp_rep$Treatment <- rep(c(0, 800, 1000, 1500), each = 3)
             temp_rep$Plate <- 2
             
           }
           
           
-          #Agregar columna de DxAm. Extraer de "temp_df" todos los datos
-          #de longitud de onda 525 en orden
+          # Agregar columna de DxAm. Extraer de "temp_df" todos los datos
+          # de longitud de onda 525 en orden
           
-          temp_vec_525 <- c() #vector vac?o
+          temp_vec_525 <- c() # vector vacío
           temp_vec <- temp_df[seq(2, nrow(temp_df), by = 2), -1]
           for (a in 1:nrow(temp_df[seq(2, nrow(temp_df), by = 2), -1])) {
             
@@ -313,10 +317,10 @@ FRET.data <- function(dir.input, dir.output) {
           }
           
           
-          #Agregar columna de DxDm. Extraer de "temp_df" todos los datos
-          #de longitud de onda 475 en orden
+          # Agregar columna de DxDm. Extraer de "temp_df" todos los datos
+          # de longitud de onda 475 en orden
           
-          temp_vec_475 <- c() #vector vac?o
+          temp_vec_475 <- c() # vector vac?o
           temp_vec <- temp_df[seq(1, nrow(temp_df), by = 2), -1]
           for (a in 1:nrow(temp_df[seq(1, nrow(temp_df), by = 2), -1])) {
             
@@ -324,32 +328,32 @@ FRET.data <- function(dir.input, dir.output) {
             
           }
           
-          #A?adir columnas finales
+          # A?adir columnas finales
           temp_rep$DxAm <- temp_vec_525
           temp_rep$DxDm <- temp_vec_475
           
-          #Agregar el cociente DxAm/DxDm
+          # Agregar el cociente DxAm/DxDm
           temp_rep$`DxAm/DxDm` <- temp_vec_525/temp_vec_475
           
-          #Agregar el Mean de DxAM/DxDm del Treatment a 
-          #0 NaCl para cada constructo 
+          # Agregar el Mean de DxAM/DxDm del Treatment a 
+          # 0 NaCl para cada constructo 
           
-          #Extraer todos los datos para NaCl 0 de cada constructo
-          #y sumarlos
+          # Extraer todos los datos para NaCl 0 de cada constructo
+          # y sumarlos
           h <- temp_rep[seq(1, nrow(temp_rep), 12), 4]
           i <- temp_rep[(seq(1, nrow(temp_rep), 12) + 1), 4]
           j <- temp_rep[(seq(1, nrow(temp_rep), 12) + 2), 4]
           
-          #Sumar todos los datos y dividirlos entre tres. A?adir
-          #cada valor del vector cada 12 veces para que corresponda
-          #con el valor de cada constructo a NaCl 0M
+          # Sumar todos los datos y dividirlos entre tres. A?adir
+          # cada valor del vector cada 12 veces para que corresponda
+          # con el valor de cada constructo a NaCl 0M
           temp_rep$Mean <- rep((h + i + j)/(3), each = 12)
           
-          #Dividir cada valor del Mean con el valor de la columna
-          #DxAm/DxDm para obtener la Normalized
+          # Dividir cada valor del Mean con el valor de la columna
+          # DxAm/DxDm para obtener la Normalized
           temp_rep$Normalized <- (temp_rep$`DxAm/DxDm`)/(temp_rep$Mean)
           
-          #A?adir la Replicate con la que se est? trabajando (revisar)
+          # A?adir la Replicate con la que se est? trabajando (revisar)
           temp_rep$Replicate <- as.numeric(substr(start = nchar(reps), 
                                                   stop = nchar(reps), 
                                                   x = reps))
@@ -400,11 +404,11 @@ FRET.data <- function(dir.input, dir.output) {
           
           if (exists("temp_rep6") == TRUE) {
             
-            #Juntar dataframes
+            # Juntar dataframes
             fret_all <- rbind(temp_rep1, temp_rep2, temp_rep3, 
                               temp_rep4, temp_rep5, temp_rep6)
             
-            #Guardar archivo con todos los datos del constructo
+            # Guardar archivo con todos los datos del constructo
             write.csv(x = fret_all,
                       file = file.path(dir.output, "FRET", bios, "DATA",
                                        paste0(bios, ".csv")
