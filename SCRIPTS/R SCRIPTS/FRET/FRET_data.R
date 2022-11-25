@@ -3,7 +3,8 @@
 # DEBIDO A CARACTERES "INSIVISIBLES"
 
 # Función de análisis de datos de FRET----
-FRET.data <- function(dir.input, dir.output) {
+FRET.data <- function(dir.input, dir.output, 
+                      em.min = 460, em.max = 550) {
   
   # Crear carpeta para guardar los archivos analizados
   sub_dir <- "FRET" 
@@ -81,14 +82,14 @@ FRET.data <- function(dir.input, dir.output) {
           fret <- readxl::read_excel(path = file.path(dir.input, reps, bios, 
                                                       paste0(plate, ".xlsx")),
                                      sheet = 1, 
-                                     col_names = FALSE)[-c(1:9), ]
+                                     col_names = FALSE)[-c(1:10), ]
           
           # Agregar los nombres a las columnas para identificarlas
           names(fret)[1:length(names(fret))] <- unlist(fret[2, ], use.names = FALSE)
           
           # Eliminar el primer rengl?n 
           fret <- fret[-c(1, 2), ]
-          
+
           # Crear un dataframe con el numero de columnas seg?n
           # la cantidad de datos por analizar
           temp_fret <- data.frame(matrix(ncol = (length(fret[, -c(1, 2)])/(3)), 
@@ -107,8 +108,9 @@ FRET.data <- function(dir.input, dir.output) {
           
           # Obtener Mean de cada condici?n para cada
           # una de las longitudes de onda
+          wl <- ((em.max - em.min) + 1) # Rango de longitudes de onda
           
-          temp_df <- data.frame(matrix(ncol = 4, nrow = 91))
+          temp_df <- data.frame(matrix(ncol = 4, nrow = wl))
           for (a in (seq(from = 1, to = length(fret[, -c(1, 2)]), by = 3) + 2)) {
             
             # Obtener los valores para cada longitud
