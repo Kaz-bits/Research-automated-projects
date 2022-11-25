@@ -37,14 +37,14 @@ FRET.delta <- function(dir.bios, format.plot = "pdf") {
       
       # Obtener la media 
       temp_mean[length(temp_mean) + 1] <- mean(h - i)
-    
+      
       # Obtener la desviación estándar 
       temp_sd[length(temp_sd) + 1] <- sd(h - i)
       
     }
     
   }
-
+  
   # Construir dataframe para guardar datos 
   fret_delta <- data.frame(matrix(nrow = length(temp_names), 
                                   ncol = 3))
@@ -86,22 +86,21 @@ FRET.delta <- function(dir.bios, format.plot = "pdf") {
     geom_errorbar(data = fret_delta, aes(x = mean_delta, 
                                          y = as.factor(construct), 
                                          xmin = mean_delta - sd_delta, 
-                                         xmax = mean_delta + sd_delta), width = 0.5) +
+                                         xmax = mean_delta + sd_delta), width = 0.2) +
     labs(x = expression(Delta * "FRET"), 
          y = "IDR") +
     theme_bw() +
     theme(axis.title = element_text(size = 14),
           axis.text = element_text(size = 12),
           panel.grid = element_blank())  + 
-    coord_cartesian(xlim = c(-0.5, 2))
+    coord_cartesian(xlim = c(0, 0.5))
   
   # Guardar gráfico 
   ggsave(plot = plot, 
-         filename = file.path(dir.bios, paste0("all_biosensors.pdf")), 
+         filename = file.path(dir.bios, paste0("all_biosensors.", format.plot)), 
          device = format.plot, 
          width = 5, height = 4, units = "in", dpi = 450)
   
 }
-
 
 
