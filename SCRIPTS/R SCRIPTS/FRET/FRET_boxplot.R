@@ -29,7 +29,7 @@ FRET.boxplot <- function(dir.bios, format.plot = "pdf") {
       # Pruebas estadísticas
       # Prueba t.test para 0 vs 200
       p1 <- t.test(fret_ratio[fret_ratio$Treatment == 0 & fret_ratio$Plate == 1,]$Normalized, 
-             fret_ratio[fret_ratio$Treatment == 200,]$Normalized)[[3]]
+                   fret_ratio[fret_ratio$Treatment == 200,]$Normalized)[[3]]
       
       
       # Prueba t.test para 0 vs 400
@@ -115,7 +115,7 @@ FRET.boxplot <- function(dir.bios, format.plot = "pdf") {
                  size = 5)
       
       # Guardar gráfico
-      ggsave(plot = plot, filename = file.path(dir.bios, bios, "PLOTS", paste0(bios, ".pdf")),
+      ggsave(plot = plot, filename = file.path(dir.bios, bios, "PLOTS", paste0(bios, ".", format.plot)),
              device = format.plot, width = 6, height = 4, units = "in", 
              dpi = 400) 
       
@@ -128,5 +128,4 @@ FRET.boxplot <- function(dir.bios, format.plot = "pdf") {
     }
   }
 }
-
 
