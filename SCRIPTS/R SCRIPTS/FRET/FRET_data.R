@@ -4,7 +4,11 @@
 
 # Función de análisis de datos de FRET----
 FRET.data <- function(dir.input, dir.output, 
-                      em.min = 460, em.max = 550) {
+                      isosbestic = 515, 
+                      em.min = 460, 
+                      em.max = 550,
+                      DxAm = 525,
+                      DxDm = 475) {
   
   # Crear carpeta para guardar los archivos analizados
   sub_dir <- "FRET" 
@@ -89,7 +93,7 @@ FRET.data <- function(dir.input, dir.output,
           
           # Eliminar el primer rengl?n 
           fret <- fret[-c(1, 2), ]
-
+          
           # Crear un dataframe con el numero de columnas seg?n
           # la cantidad de datos por analizar
           temp_fret <- data.frame(matrix(ncol = (length(fret[, -c(1, 2)])/(3)), 
@@ -146,7 +150,7 @@ FRET.data <- function(dir.input, dir.output,
           
           # Normalizar fluorescencia con punto isosb?stico
           
-          temp <- (t(temp_fret[temp_fret[, 1] == as.character(515),
+          temp <- (t(temp_fret[temp_fret[, 1] == as.character(isosbestic),
                                c(2:length(temp_fret))]))
           rownames(temp) <- NULL
           
@@ -229,8 +233,8 @@ FRET.data <- function(dir.input, dir.output,
           
           # Obtener los renglones con las fluorescencias del donador y
           # aceptor
-          temp_rep <- fret[fret$`Wavelength [nm]` == "475" | 
-                             fret$`Wavelength [nm]` == "525", ]
+          temp_rep <- fret[fret$`Wavelength [nm]` == as.character(DxDm) | 
+                             fret$`Wavelength [nm]` == as.character(DxAm), ]
           
           temp_vec <- c() # vector vac?o
           # Ejecutar c?digo
@@ -242,7 +246,7 @@ FRET.data <- function(dir.input, dir.output,
             
           }
           
-          temp_df[, length(temp_df) + 1] <- c(475, 525)
+          temp_df[, length(temp_df) + 1] <- c(as.character(DxDm), as.character(DxAm))
           temp_df <- temp_df[, c(length(temp_df), (1:length(temp_df) - 1))]
           names(temp_df)[1] <- names(fret)[2]
           
