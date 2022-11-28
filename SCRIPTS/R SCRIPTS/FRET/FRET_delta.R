@@ -3,7 +3,9 @@ library(ggplot2)
 library(ggpubr)
 
 # Función para obtener el delta FRET
-FRET.delta <- function(dir.bios, format.plot = "pdf") {
+FRET.delta <- function(dir.bios, format.plot = "pdf",
+                       xaxis_max = 0.5, xaxis_min = 0,
+                       width = 5, height = 30) {
   
   # Obtener el nombre de cada biosensor
   temp_files <- list.files(dir.bios)
@@ -93,14 +95,13 @@ FRET.delta <- function(dir.bios, format.plot = "pdf") {
     theme(axis.title = element_text(size = 14),
           axis.text = element_text(size = 12),
           panel.grid = element_blank())  + 
-    coord_cartesian(xlim = c(0, 0.5))
+    coord_cartesian(xlim = c(xaxis_min, xaxis_max))
   
   # Guardar gráfico 
   ggsave(plot = plot, 
          filename = file.path(dir.bios, paste0("all_biosensors.", format.plot)), 
          device = format.plot, 
-         width = 5, height = 4, units = "in", dpi = 450)
+         width = width, height = height, units = "in", dpi = 450)
   
 }
-
 
