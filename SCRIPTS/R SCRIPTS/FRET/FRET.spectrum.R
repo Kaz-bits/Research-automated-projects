@@ -3,7 +3,11 @@ library(ggplot2)
 library(ggpubr)
 
 # Función para generar espectros 
-FRET.spectrum <- function(dir.sptr, format.plot = "pdf") {
+FRET.spectrum <- function(dir.sptr, format.plot = "pdf",
+                          ymax_name = 1.8, 
+                          ymax_axis = 2, ymin_axis = 0.3,
+                          yaxis_ticks = 0.2, 
+                          bios_name = TRUE) {
   
   
   # Obtener el nombre de la carpeta de las réplicas
@@ -36,19 +40,19 @@ FRET.spectrum <- function(dir.sptr, format.plot = "pdf") {
       next
       
     }
-
+    
     
     # Verificar si existe el archivo
     temp_path <- file.path(dir.sptr, bios, "DATA", temp_files[2])
     if (file.exists(temp_path) == TRUE) {
       
-    # Cargar datos de placa 2 y réplica 1
-    sptr_2 <- read.csv(file = temp_path,
-                       header = TRUE)
-    
-    # Eliminar columnas para evitar repeticiones
-    sptr_2$Wavelength..nm. <- NULL
-    
+      # Cargar datos de placa 2 y réplica 1
+      sptr_2 <- read.csv(file = temp_path,
+                         header = TRUE)
+      
+      # Eliminar columnas para evitar repeticiones
+      sptr_2$Wavelength..nm. <- NULL
+      
     } else {
       
       next
@@ -60,14 +64,14 @@ FRET.spectrum <- function(dir.sptr, format.plot = "pdf") {
     temp_path <- file.path(dir.sptr, bios, "DATA", temp_files[3])
     if (file.exists(temp_path) == TRUE) {
       
-    # Cargar datos de placa 1 y réplica 2
-    sptr_3 <- read.csv(file = temp_path,
-                       header = TRUE)
-    # Eliminar columnas para evitar repeticiones
-    sptr_3$Replicate <- NULL
-    sptr_3$Plate <- NULL
-    sptr_3$Construct <- NULL
-    
+      # Cargar datos de placa 1 y réplica 2
+      sptr_3 <- read.csv(file = temp_path,
+                         header = TRUE)
+      # Eliminar columnas para evitar repeticiones
+      sptr_3$Replicate <- NULL
+      sptr_3$Plate <- NULL
+      sptr_3$Construct <- NULL
+      
     } else {
       
       next
@@ -79,12 +83,12 @@ FRET.spectrum <- function(dir.sptr, format.plot = "pdf") {
     temp_path <- file.path(dir.sptr, bios, "DATA", temp_files[4])
     if (file.exists(temp_path) == TRUE) {
       
-    # Cargar datos de placa 2 y réplica 2
-    sptr_4 <- read.csv(file = temp_path,
-                       header = TRUE)
-    # Eliminar columnas para evitar repeticiones
-    sptr_4$Wavelength..nm. <- NULL
-    
+      # Cargar datos de placa 2 y réplica 2
+      sptr_4 <- read.csv(file = temp_path,
+                         header = TRUE)
+      # Eliminar columnas para evitar repeticiones
+      sptr_4$Wavelength..nm. <- NULL
+      
     } else {
       
       next
@@ -96,14 +100,14 @@ FRET.spectrum <- function(dir.sptr, format.plot = "pdf") {
     temp_path <- file.path(dir.sptr, bios, "DATA", temp_files[5])
     if (file.exists(temp_path) == TRUE) {
       
-    # Cargar datos de placa 1 y réplica 3
-    sptr_5 <- read.csv(file = temp_path,
-                       header = TRUE)
-    # Eliminar columnas para evitar repeticiones
-    sptr_5$Replicate <- NULL
-    sptr_5$Plate <- NULL
-    sptr_5$Construct <- NULL
-    
+      # Cargar datos de placa 1 y réplica 3
+      sptr_5 <- read.csv(file = temp_path,
+                         header = TRUE)
+      # Eliminar columnas para evitar repeticiones
+      sptr_5$Replicate <- NULL
+      sptr_5$Plate <- NULL
+      sptr_5$Construct <- NULL
+      
     } else {
       
       next
@@ -115,19 +119,19 @@ FRET.spectrum <- function(dir.sptr, format.plot = "pdf") {
     temp_path <- file.path(dir.sptr, bios, "DATA", temp_files[6])
     if (file.exists(temp_path) == TRUE) {
       
-    # Cargar datos de placa 2 y réplica 3
-    sptr_6 <- read.csv(file = file.path(dir.sptr, bios, "DATA", temp_files[6]),
-                       header = TRUE)
-    # Eliminar columnas para evitar repeticiones
-    sptr_6$Wavelength..nm. <- NULL
-    
+      # Cargar datos de placa 2 y réplica 3
+      sptr_6 <- read.csv(file = file.path(dir.sptr, bios, "DATA", temp_files[6]),
+                         header = TRUE)
+      # Eliminar columnas para evitar repeticiones
+      sptr_6$Wavelength..nm. <- NULL
+      
     } else {
       
       next
       
     }
     
-
+    
     # Generar gráfico de espectros
     # Generar paleta de colores
     color_lines <- c("#add8e6", "#92b8dc", "#7698d1", 
@@ -174,13 +178,26 @@ FRET.spectrum <- function(dir.sptr, format.plot = "pdf") {
             legend.title = element_text(size = 14),
             legend.text = element_text(size = 12),
             panel.grid = element_blank()) +
-      coord_cartesian(ylim = c(0.3, 2)) +
-      scale_y_continuous(breaks = seq(0.3, 2,0.2)) +
+      coord_cartesian(ylim = c(ymin_axis, ymax_axis)) +
+      scale_y_continuous(breaks = seq(ymin_axis, ymax_axis, yaxis_ticks)) +
       scale_color_manual(name = "[NaCl] (M)",
                          values = color_lines, 
                          label = NaCl_lines) +
-      annotate(geom = "text", x = 505, y = 1.8, 
-               label = paste0("IDRBS-", bios), size = 4.5)
+      
+      # Condicional para añadir el nombre
+      if (bios_name == TRUE) {
+        
+        # Colocar nombre del número del biosensor  
+        annotate(geom = "text", x = 505, y = ymax_name, 
+                 label = paste0("IDRBS-", bios), size = 4.5)
+        
+      } else {
+        
+        # Colocar nombre de acuerdo con el nombre de la carpeta de FRET
+        annotate(geom = "text", x = 505, y = ymax_name, 
+                 label = bios, size = 4.5)
+        
+      }
     
     # Generar nombre del gráfico
     name_plot <- paste0("plot_sptr_", bios, "_", temp_fret_N$Replicate[1], ".",
@@ -232,13 +249,26 @@ FRET.spectrum <- function(dir.sptr, format.plot = "pdf") {
             legend.title = element_text(size = 14),
             legend.text = element_text(size = 12),
             panel.grid = element_blank()) +
-      coord_cartesian(ylim = c(0.3, 2)) +
-      scale_y_continuous(breaks = seq(0.3, 2,0.2)) +
+      coord_cartesian(ylim = c(ymin_axis, ymax_axis)) +
+      scale_y_continuous(breaks = seq(ymin_axis, ymax_axis, yaxis_ticks)) +
       scale_color_manual(name = "[NaCl] (M)",
                          values = color_lines, 
                          label = NaCl_lines) +
-      annotate(geom = "text", x = 505, y = 1.8, 
-               label = paste0("IDRBS-", bios), size = 4.5)
+      
+      # Condicional para añadir el nombre
+      if (bios_name == TRUE) {
+        
+        # Colocar nombre del número del biosensor  
+        annotate(geom = "text", x = 505, y = ymax_name, 
+                 label = paste0("IDRBS-", bios), size = 4.5)
+        
+      } else {
+        
+        # Colocar nombre de acuerdo con el nombre de la carpeta de FRET
+        annotate(geom = "text", x = 505, y = ymax_name, 
+                 label = bios, size = 4.5)
+        
+      }
     
     # Generar nombre del gráfico
     name_plot <- paste0("plot_sptr_", bios, "_", temp_fret_N$Replicate[1], ".",
@@ -289,13 +319,26 @@ FRET.spectrum <- function(dir.sptr, format.plot = "pdf") {
             legend.title = element_text(size = 14),
             legend.text = element_text(size = 12),
             panel.grid = element_blank()) +
-      coord_cartesian(ylim = c(0.3, 2)) +
-      scale_y_continuous(breaks = seq(0.3, 2,0.2)) +
+      coord_cartesian(ylim = c(ymin_axis, ymax_axis)) +
+      scale_y_continuous(breaks = seq(ymin_axis, ymax_axis, yaxis_ticks)) +
       scale_color_manual(name = "[NaCl] (M)",
                          values = color_lines, 
                          label = NaCl_lines) +
-      annotate(geom = "text", x = 505, y = 1.8, 
+      
+      # Condicional para añadir el nombre
+      if (bios_name == TRUE) {
+      
+      # Colocar nombre del número del biosensor  
+      annotate(geom = "text", x = 505, y = ymax_name, 
                label = paste0("IDRBS-", bios), size = 4.5)
+    
+      } else {
+        
+        # Colocar nombre de acuerdo con el nombre de la carpeta de FRET
+        annotate(geom = "text", x = 505, y = ymax_name, 
+                 label = bios, size = 4.5)
+        
+      }
     
     # Generar nombre del gráfico
     name_plot <- paste0("plot_sptr_", bios, "_", temp_fret_N$Replicate[1], ".",
@@ -309,6 +352,6 @@ FRET.spectrum <- function(dir.sptr, format.plot = "pdf") {
     
     # Eliminar variable temp_fret_N
     remove(... = temp_fret_N)
-
+    
   }
 }
