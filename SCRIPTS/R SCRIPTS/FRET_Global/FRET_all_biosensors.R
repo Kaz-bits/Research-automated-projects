@@ -35,5 +35,5 @@ all_bios <- all_bios[order(all_bios$Construct, decreasing = FALSE), ]
 # Guardar archivo
 write.csv(x = all_bios,
           row.names = FALSE, quote = FALSE,
-          file = file.path(dir_fret, "/fret_ratio_all.csv"))
+          file = file.path(dir_fret, "fret_ratio_all.csv"))
 
