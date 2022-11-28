@@ -3,7 +3,11 @@ library(ggplot2)
 library(ggpubr)
 
 # Función para generar boxplots
-FRET.boxplot <- function(dir.bios, format.plot = "pdf") {
+FRET.boxplot <- function(dir.bios, format.plot = "pdf", 
+                         ymax_text = 2.5, ymax_name = 2.85,
+                         ymax_axis = 3, ymin_axis = 0.85,
+                         yaxis_ticks = 0.5, 
+                         bios_name = TRUE) {
   
   # Obtener el nombre de cada biosensor
   temp_files <- list.files(dir.bios)
@@ -103,17 +107,28 @@ FRET.boxplot <- function(dir.bios, format.plot = "pdf") {
         theme(axis.title = element_text(size = 14),
               axis.text = element_text(size = 12),
               panel.grid = element_blank()) +
-        coord_cartesian(ylim = c(0.85,3)) +
-        scale_y_continuous(breaks = seq(0.85,3,0.5)) +
-        annotate(geom = "text", x = 2, y = 2.5, label = p1_box) +
-        annotate(geom = "text", x = 3, y = 2.5, label = p2_box) +
-        annotate(geom = "text", x = 4, y = 2.5, label = p3_box)  +
-        annotate(geom = "text", x = 5, y = 2.5, label = p4_box) +
-        annotate(geom = "text", x = 6, y = 2.5, label = p5_box) +
-        annotate(geom = "text", x = 7, y = 2.5, label = p6_box)  +
-        annotate(geom = "text", x = 4, y = 2.85, label = paste0("IDRBS-", bios),
+        coord_cartesian(ylim = c(ymin_axis, ymax_axis)) +
+        scale_y_continuous(breaks = seq(ymin_axis, ymax_axis, yaxis_ticks)) +
+        annotate(geom = "text", x = 2, y = ymax_text, label = p1_box) +
+        annotate(geom = "text", x = 3, y = ymax_text, label = p2_box) +
+        annotate(geom = "text", x = 4, y = ymax_text, label = p3_box)  +
+        annotate(geom = "text", x = 5, y = ymax_text, label = p4_box) +
+        annotate(geom = "text", x = 6, y = ymax_text, label = p5_box) +
+        annotate(geom = "text", x = 7, y = ymax_text, label = p6_box)  +
+        # Condicional para el nombre
+        if (bios_name == TRUE) {
+          
+        # Agregar nombres de acuerdo con número de biosensor
+        annotate(geom = "text", x = 4, y = ymax_name, label = paste0("IDRBS-", bios),
                  size = 5)
-      
+          
+        } else {
+          
+        # Agregar nombre de acuerdo a las carpetas de FRET
+        annotate(geom = "text", x = 4, y = ymax_name, label = bios,
+                 size = 5)
+        }
+          
       # Guardar gráfico
       ggsave(plot = plot, filename = file.path(dir.bios, bios, "PLOTS", paste0(bios, ".", format.plot)),
              device = format.plot, width = 6, height = 4, units = "in", 
@@ -128,4 +143,5 @@ FRET.boxplot <- function(dir.bios, format.plot = "pdf") {
     }
   }
 }
+
 
