@@ -86,7 +86,7 @@ FRET.data <- function(dir.input, dir.output,
           fret <- readxl::read_excel(path = file.path(dir.input, reps, bios, 
                                                       paste0(plate, ".xlsx")),
                                      sheet = 1, 
-                                     col_names = FALSE)[-c(1:10), ]
+                                     col_names = FALSE)[-c(1:9), ]
           
           # Agregar los nombres a las columnas para identificarlas
           names(fret)[1:length(names(fret))] <- unlist(fret[2, ], use.names = FALSE)
