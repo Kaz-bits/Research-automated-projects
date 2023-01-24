@@ -2,17 +2,18 @@
 # para juntar todos los datos del cociente FRET de los 
 # 200 biosensores analizados
 
+# Definir directorio de la carpeta FRET
+dir_fret <- "D:/FRET Script Biblioteca/data/FRET/"
 
 # Obtener el nombre de todos los biosensores
-list_names <- list.files(path = "E:/Screenig biblioteca/FRET/")[-c(181, 182)]
+list_names <- list.files("D:/FRET Script Biblioteca/data/IDR_Biosensors/Replica 1/")
 
-# Contruir data frame para juntar todos los datos
+# Construir data frame para juntar todos los datos
 all_bios <- data.frame()
 for (a in list_names) {
   
   # Directorio del archivo
-  temp_file <- file.path("E:/Screenig biblioteca/FRET", a, "DATA", 
-                         paste0(a, ".csv"))
+  temp_file <- file.path(dir_fret, a, "DATA", paste0(a, ".csv"))
   
   # Verificar si existe el archivo
   temp <- file.exists(temp_file)
@@ -33,6 +34,4 @@ all_bios <- all_bios[order(all_bios$Construct, decreasing = FALSE), ]
 # Guardar archivo
 write.csv(x = all_bios,
           row.names = FALSE, quote = FALSE,
-          file = "C:/Users/HP/Desktop/FRET R SCRIPTS/all_biosensors.csv")
-
-
+          file = file.path(dir_fret, "all_FRET_biosensors.csv"))
