@@ -17,7 +17,7 @@ temp2 <- as.numeric(substr(df_fret_200_cider$Entry, 7, 9))
 
 # Obtener datos de CIDER de biosensores analizados
 eee(eetemp2 %in% temp1)
-essseweqweweqwe
+essseweqweweqwe #no se que es esto jaja
 # Gráficos de correlaciones----
 
 # Gráfico de delta FRET vs Longitud
