@@ -9,13 +9,13 @@ When you finished obtaining all of your data from the plate reader CLARIOstar, y
 obtain an EXCEL file that must show the next information:
 
 -----------------------------------------------------
-User: USER													
-Path: C:\Program Files (x86)\BMG\CLARIOstar\User\Data													
-Test ID: 454													
-Test Name: IDPbiosensorsG													
-Date: 6/16/2022													
-Time: 7:30:57 PM													
-Fluorescence (FI) spectrum													
+#### User: USER													
+#### Path: C:\Program Files (x86)\BMG\CLARIOstar\User\Data													
+#### Test ID: 454													
+#### Test Name: IDPbiosensorsG													
+#### Date: 6/16/2022													
+#### Time: 7:30:57 PM													
+#### Fluorescence (FI) spectrum													
 													
 													
 #### Well		G01	G02	G03	G04	G05	G06	G07	G08	G09	G10	G11	G12
