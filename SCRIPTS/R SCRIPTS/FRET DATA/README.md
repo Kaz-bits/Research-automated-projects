@@ -18,10 +18,10 @@ Time: 7:30:57 PM
 Fluorescence (FI) spectrum													
 													
 													
-Well		G01	G02	G03	G04	G05	G06	G07	G08	G09	G10	G11	G12
-Content	Wavelength [nm]	Sample X1	Sample X2	Sample X3	Sample X4	Sample X5	Sample X6	Sample X7	Sample X8	Sample X9	Sample X10	Sample X11	Sample X12
-Raw Data (Em Spectrum)	460	14713	13724	14259	13579	14337	13201	11391	11334	11955	11723	11861	11813
-Raw Data (Em Spectrum)	461	16040	15713	15329	14960	14732	14599	13979	13234	13315	13451	13538	13219
+# Well		G01	G02	G03	G04	G05	G06	G07	G08	G09	G10	G11	G12
+# Content	Wavelength [nm]	Sample X1	Sample X2	Sample X3	Sample X4	Sample X5	Sample X6	Sample X7	Sample X8	Sample X9	Sample X10	Sample X11	Sample X12
+# Raw Data (Em Spectrum)	460	14713	13724	14259	13579	14337	13201	11391	11334	11955	11723	11861	11813
+# Raw Data (Em Spectrum)	461	16040	15713	15329	14960	14732	14599	13979	13234	13315	13451	13538	13219
 -----------------------------------------------------
 
 I recommend to when you download the EXCEL file from the plate reader, do not move the
