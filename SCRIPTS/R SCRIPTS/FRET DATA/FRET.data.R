@@ -506,3 +506,5 @@ FRET.data <- function(dir.input,
     } 
   }
 }
+
+# Fin análisis
