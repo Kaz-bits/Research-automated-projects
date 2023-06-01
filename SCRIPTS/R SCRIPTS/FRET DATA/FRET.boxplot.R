@@ -146,4 +146,3 @@ FRET.boxplot <- function(dir.fret,
     }
   }
 }
-
