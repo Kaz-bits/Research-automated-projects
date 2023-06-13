@@ -15,7 +15,7 @@ FRET.data <- function(dir.input,
   dir.create(temp_dir, showWarnings = FALSE)
   
   # Obtener el nombre de la carpeta de las r?plicas
-  temp_files <- list.files(dir.input)
+  temp_files <<- list.files(dir.input)
   
   # Obtener los nombres de los biosensores en cada carpeta
   for (i in temp_files) {
@@ -394,17 +394,17 @@ FRET.data <- function(dir.input,
             
           } 
           
-          if (file.exists(temp_files[2])) {
-            
+          
+          if (!is.na(temp_files[2]) == TRUE) {
             if (reps == temp_files[2] && plate == 1) {
               
               temp_rep3 <- temp_rep
               
             }
-          } 
+          }
           
-          if (file.exists(temp_files[2])) {
-            
+          
+          if (!is.na(temp_files[2]) == TRUE) {
             if (reps == temp_files[2] && plate == 2) {
               
               temp_rep4 <- temp_rep
@@ -412,8 +412,8 @@ FRET.data <- function(dir.input,
             }
           }
           
-          if (file.exists(temp_files[3])) {
-            
+          
+          if (!is.na(temp_files[3]) == TRUE) {
             if (reps == temp_files[3] && plate == 1) {
               
               temp_rep5 <- temp_rep
@@ -421,8 +421,8 @@ FRET.data <- function(dir.input,
             }
           }
           
-          if (file.exists(temp_files[3])) {
-            
+          
+          if (!is.na(temp_files[3]) == TRUE) {
             if (reps == temp_files[3] && plate == 2) {
               
               temp_rep6 <- temp_rep
@@ -505,6 +505,36 @@ FRET.data <- function(dir.input,
       }
     } 
   }
+  
+  # Evaluar la cantidad de réplicas
+  if (length(temp_files) < 3) {
+    
+    # Mostrar mensaje
+    message("====================================\nSe recomienda realizar más réplicas\n====================================\n\n")
+    
+  } else if (length(temp_files > 3)) {
+    
+    # Mostrar mensaje
+    message("====================================\nSelecciona tres réplicas\n====================================\n\n")
+    
+  } else {
+    
+    message("====================================\nExperimento realizado con tres réplicas\n====================================\n\n")
+    
+  }
+  
+  
+  # Mostrar resumen del análisis de datos
+  message("Resumen del análisis:")
+  message("==============================================\n")
+
+  message(paste("Punto isosbéstico: ", isosbestic, "nm"))
+  message(paste("Fluorescencia del aceptor (DxAm): ", DxAm, "nm"))
+  message(paste("Fluorescencia del donador (DxDm): ", DxDm, "nm"))
+  
+  message("\n==============================================")
+  
 }
 
 # Fin análisis
+
