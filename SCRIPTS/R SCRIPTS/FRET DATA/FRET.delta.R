@@ -4,7 +4,7 @@ library(ggpubr)
 
 # Función para obtener el delta FRET
 FRET.delta <- function(dir.fret, 
-                       format.plot = "pdf",
+                       format.plot = "png",
                        xaxis_max = 0.5, 
                        xaxis_min = 0,
                        width = 5, 
