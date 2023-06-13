@@ -106,5 +106,11 @@ FRET.delta <- function(dir.fret,
          device = format.plot, 
          width = width, height = height, units = "in", dpi = 450)
   
+  
+  # Mostrar mensajes
+  message("Recuerda ajustar las dimensiones del gráfico con los argumentos width y height\n")
+  message("Valores por default")
+  message("Width: 5 in")
+  message("Heigth: 30 in")
+  
 }
-
