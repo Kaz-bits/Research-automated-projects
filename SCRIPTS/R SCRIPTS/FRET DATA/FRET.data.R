@@ -510,15 +510,18 @@ FRET.data <- function(dir.input,
   if (length(temp_files) < 3) {
     
     # Mostrar mensaje
+    message(paste("Réplicas analizadas: ", length(temp_files)))
     message("====================================\nSe recomienda realizar más réplicas\n====================================\n\n")
-    
+
   } else if (length(temp_files > 3)) {
     
     # Mostrar mensaje
+    message(paste("Réplicas analizadas: ", length(temp_files)))
     message("====================================\nSelecciona tres réplicas\n====================================\n\n")
     
   } else {
     
+    message(paste("Réplicas analizadas: ", length(temp_files)))
     message("====================================\nExperimento realizado con tres réplicas\n====================================\n\n")
     
   }
@@ -537,4 +540,3 @@ FRET.data <- function(dir.input,
 }
 
 # Fin análisis
-
