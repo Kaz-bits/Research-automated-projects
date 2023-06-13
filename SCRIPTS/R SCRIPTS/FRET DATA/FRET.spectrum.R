@@ -4,7 +4,7 @@ library(ggpubr)
 
 # Función para generar espectros 
 FRET.spectrum <- function(dir.fret, 
-                          format.plot = "pdf",
+                          format.plot = "png",
                           ymax_name = 1.8, 
                           ymax_axis = 2, 
                           ymin_axis = 0.3,
@@ -20,7 +20,7 @@ FRET.spectrum <- function(dir.fret,
     
     # Obtener el nombre de cada biosensor 
     temp_files <- list.files(path = file.path(dir.fret, bios, "DATA"), 
-                              pattern = "sptr")
+                             pattern = "sptr")
     
     
     # Cargar datos de placa 1 y réplica 1
@@ -30,7 +30,7 @@ FRET.spectrum <- function(dir.fret,
       
       # Cargar archivo
       sptr_1 <- read.csv(file = file.path(dir.fret, bios, "DATA", temp_files[1]),
-                          header = TRUE)
+                         header = TRUE)
       
       # Eliminar columnas para evitar repeticiones
       sptr_1$Replicate <- NULL
@@ -46,7 +46,7 @@ FRET.spectrum <- function(dir.fret,
       
       # Cargar datos de placa 2 y réplica 1
       sptr_2 <- read.csv(file = file.path(dir.fret, bios, "DATA", temp_files[2]),
-                          header = TRUE)
+                         header = TRUE)
       
       # Eliminar columnas para evitar repeticiones
       sptr_2$Wavelength..nm. <- NULL
@@ -60,7 +60,7 @@ FRET.spectrum <- function(dir.fret,
       
       # Cargar datos de placa 1 y réplica 2
       sptr_3 <- read.csv(file = file.path(dir.fret, bios, "DATA", temp_files[3]),
-                          header = TRUE)
+                         header = TRUE)
       
       # Eliminar columnas para evitar repeticiones
       sptr_3$Replicate <- NULL
@@ -76,7 +76,7 @@ FRET.spectrum <- function(dir.fret,
       
       # Cargar datos de placa 2 y réplica 2
       sptr_4 <- read.csv(file = file.path(dir.fret, bios, "DATA", temp_files[4]),
-                          header = TRUE)
+                         header = TRUE)
       
       # Eliminar columnas para evitar repeticiones
       sptr_4$Wavelength..nm. <- NULL
@@ -90,7 +90,7 @@ FRET.spectrum <- function(dir.fret,
       
       # Cargar datos de placa 1 y réplica 3
       sptr_5 <- read.csv(file = file.path(dir.fret, bios, "DATA", temp_files[5]),
-                          header = TRUE)
+                         header = TRUE)
       
       # Eliminar columnas para evitar repeticiones
       sptr_5$Replicate <- NULL
@@ -106,7 +106,7 @@ FRET.spectrum <- function(dir.fret,
       
       # Cargar datos de placa 2 y réplica 3
       sptr_6 <- read.csv(file = file.path(dir.fret, bios, "DATA", temp_files[6]),
-                          header = TRUE)
+                         header = TRUE)
       
       # Eliminar columnas para evitar repeticiones
       sptr_6$Wavelength..nm. <- NULL
@@ -348,4 +348,9 @@ FRET.spectrum <- function(dir.fret,
       
     } # Fin réplica 3
   }
+  
+  # Mostrar mensajes
+  message("Gráficos generados con éxito")
+  
 }
+
