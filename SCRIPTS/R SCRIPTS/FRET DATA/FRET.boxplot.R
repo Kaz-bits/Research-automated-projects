@@ -4,7 +4,7 @@ library(ggpubr)
 
 # Función para generar boxplots
 FRET.boxplot <- function(dir.fret, 
-                         format.plot = "pdf", 
+                         format.plot = "png", 
                          ymax_text = 2.5, 
                          ymax_name = 2.85,
                          ymax_axis = 3, 
@@ -145,4 +145,8 @@ FRET.boxplot <- function(dir.fret,
       
     }
   }
+  
+  # Mostrar mensajes
+  message("Gráficos generados con éxito")
+  
 }
