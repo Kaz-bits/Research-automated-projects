@@ -1,7 +1,6 @@
-## Project: Analaysis of Genome and Proteome databases. LAB-103, FQ, UNAM
-This repository stores all the needed information to replicate the *Arabidopsis thaliana* proteome database and transcription factors database. 
+## Data analysis of FRET data. LAB-103, FQ, UNAM
+This repository stores different projects in each folder. Depending on the analysis you want to perform with your data, you need to move into a specific folder. 
 
-You will find the R and Bash script to analyze genome and proteome databases. 
 Consider that the Bash Scripts was created using the Bash Linux Distribution.
 
 Updated: 18/02/2025
